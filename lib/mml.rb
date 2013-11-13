@@ -71,4 +71,40 @@ module MML
       end
     end
   end
+
+  class Id
+    attr_reader :value, :type, :tableId
+    attr_accessor :checkDigit, :checkDigitSchema
+
+    def initialize(args = {})
+      self.value = args[:value]
+      self.type = args[:type]
+      self.tableId = args[:tableId]
+      self.checkDigit = args[:checkDigit]
+      self.checkDigitSchema = args[:checkDigitSchema]
+    end
+
+    def value=(value)
+      raise ArgumentError, 'value should not be nil' if value.nil? or value.empty?
+      @value = value
+    end
+
+    def type=(type)
+      raise ArgumentError, 'type should no be nil' if type.nil? or type.empty?
+      @type = type
+    end
+
+    def tableId=(tableId)
+      raise ArgumentError, 'table id is required' if tableId.nil? or type.empty?
+      @tableId = tableId
+    end
+
+    def to_xml
+      xb = Builder::XmlMarkup.new
+      attributes = {'mmlCm:type' => @type, 'mmlCm:tableId' => @tableId }
+      attributes['mmlCm:checkDigit'] = @checkDigit if @checkDigit
+      attributes['mmlCm:checkDigitSchema'] = @checkDigitSchema if @checkDigitSchema
+      xb.mmlCm :Id,  @value, attributes
+    end
+  end
 end
