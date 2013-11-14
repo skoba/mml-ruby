@@ -54,7 +54,7 @@ describe MML::Id do
       expect(id.to_xml).to match 'mmlCm:checkDigitSchema="MML0001"'
     end
 
-    it 'assigned value match 1234' do
+    it 'assigned value match 12345' do
       expect(id.to_xml).to match '>12345</mmlCm:Id>'
     end
   end

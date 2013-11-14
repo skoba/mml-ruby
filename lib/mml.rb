@@ -101,10 +101,36 @@ module MML
 
     def to_xml
       xb = Builder::XmlMarkup.new
-      attributes = {'mmlCm:type' => @type, 'mmlCm:tableId' => @tableId }
-      attributes['mmlCm:checkDigit'] = @checkDigit if @checkDigit
-      attributes['mmlCm:checkDigitSchema'] = @checkDigitSchema if @checkDigitSchema
-      xb.mmlCm :Id,  @value, attributes
+      attributes = {'mmlCm:type' => type, 'mmlCm:tableId' => tableId }
+      attributes['mmlCm:checkDigit'] = checkDigit if checkDigit
+      attributes['mmlCm:checkDigitSchema'] = checkDigitSchema if checkDigitSchema
+      xb.mmlCm :Id,  value, attributes
+    end
+  end
+
+  class MML::ExtRef
+    attr_accessor :contentType, :medicalRole, :title
+    attr_reader :href
+
+    def initialize(args = {})
+      self.contentType = args[:contentType]
+      self.medicalRole = args[:medicalRole]
+      self.title = args[:title]
+      self.href = args[:href]
+    end
+
+    def href=(href)
+      raise ArgumentError, 'href is mandatory' if href.nil?
+      @href = href
+    end
+
+    def to_xml
+      xb = Builder::XmlMarkup.new
+      attributes = { 'mmlCm:href' => href }
+      attributes['mmlCm:contentType'] = contentType if contentType
+      attributes['mmlCm:medicalRole'] = medicalRole if medicalRole
+      attributes['mmlCm:title'] = title if title
+      xb.mmlCm :extRef, attributes
     end
   end
 end
