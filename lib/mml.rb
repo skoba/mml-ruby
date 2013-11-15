@@ -108,7 +108,7 @@ module MML
     end
   end
 
-  class MML::ExtRef
+  class ExtRef
     attr_accessor :contentType, :medicalRole, :title
     attr_reader :href
 
@@ -131,6 +131,38 @@ module MML
       attributes['mmlCm:medicalRole'] = medicalRole if medicalRole
       attributes['mmlCm:title'] = title if title
       xb.mmlCm :extRef, attributes
+    end
+  end
+
+  class Address
+    attr_reader :repCode
+    attr_accessor :addressClass, :tableId, :homeNumber, :town, :city, :prefecture, :full, :zip, :countryCode
+
+    def initialize(args = {})
+      %W(repCode addressClass tableId full homeNumber town city prefecture zip countryCode).each do |item|
+        self.send("#{item}=", args[item.to_sym])
+      end
+    end
+
+    def repCode=(repCode)
+      raise ArgumentError, 'repCode is mandatory' if repCode.nil?
+      @repCode = repCode
+    end
+
+    def to_xml
+      xb = Builder::XmlMarkup.new
+      attributes = { 'mmlAd:repCode' => repCode }
+      attributes['mmlAd:addressClass'] = addressClass
+      attributes['mmlAd:tableId'] = tableId
+      xb.mmlAd :Address, attributes do
+        xb.mmlAd :homeNumber, homeNumber if homeNumber
+        xb.mmlAd :town, town if town
+        xb.mmlAd :city, city if city
+        xb.mmlAd :prefecture, prefecture if prefecture
+        xb.mmlAd :full, full if full
+        xb.mmlAd :zip, zip if zip
+        xb.mmlAd :countryCode, countryCode if countryCode
+      end
     end
   end
 end
