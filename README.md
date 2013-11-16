@@ -1,3 +1,5 @@
+[![Build Status](https://travis-ci.org/skoba/mml-ruby.png)](https://travis-ci.org/skoba/mml-ruby)
+
 # Ruby MML(Medical Markup Language) implementation 
 
 This is an preliminary implementation for MML by Ruby.

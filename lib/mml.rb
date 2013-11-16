@@ -165,4 +165,12 @@ module MML
       end
     end
   end
+
+  class Phone
+    attr_accessor :equipType
+
+    def initialize(args = {})
+      self.equipType = args[:equipType]
+    end
+  end
 end
