@@ -167,10 +167,25 @@ module MML
   end
 
   class Phone
-    attr_accessor :equipType
+    attr_accessor :equipType, :area, :city, :number, :extension, :country, :memo
 
     def initialize(args = {})
-      self.equipType = args[:equipType]
+      %W(equipType area city number extension country memo).each do |item|
+        self.send("#{item}=", args[item.to_sym])
+      end
+    end
+
+    def to_xml
+      xb = Builder::XmlMarkup.new
+      attributes = {'mmlPh:equipType' => equipType} if equipType
+      xb.mmlPh :Phone, attributes do
+        xb.mmlPh :area, area if area
+        xb.mmlPh :city, city if city
+        xb.mmlPh :number, number if number
+        xb.mmlPh :extension, extension if extension
+        xb.mmlPh :country, country if country
+        xb.mmlPh :memo, memo if memo
+      end
     end
   end
 end
