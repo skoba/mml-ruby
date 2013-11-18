@@ -188,4 +188,53 @@ module MML
       end
     end
   end
+
+  class Facility
+    attr_reader :name
+    attr_accessor :id
+
+    def initialize(args = {})
+      %W(name id).each do |item|
+        self.send("#{item}=", args[item.to_sym])
+      end
+    end
+
+    def name=(name)
+      raise ArgumentError, 'name is mandatory' if name.nil? or name.empty?
+      @name = name
+    end
+
+    def to_xml
+      xb = Builder::XmlMarkup.new
+      xb.mmlFc :Facility do
+        name.each do |n|
+          attributes = {'mmlFc:repCode' => n.repCode}
+          attributes['mmlFc:tableId'] = n.tableId if n.tableId
+          xb.mmlFc :name, n.value, attributes
+        end
+        xb << id.to_xml
+      end
+    end
+  end
+
+  class FacilityName
+    attr_reader :value, :repCode
+    attr_accessor :tableId
+
+    def initialize(args ={})
+      %W(value repCode tableId).each do |item|
+        self.send("#{item}=", args[item.to_sym])
+      end      
+    end
+
+    def value=(value)
+      raise ArgumentError, 'value is mandatory' if value.nil?
+      @value = value
+    end
+
+    def repCode=(repCode)
+      raise ArgumentError, 'repCode is mandatory' if repCode.nil?
+      @repCode = repCode
+    end
+  end
 end

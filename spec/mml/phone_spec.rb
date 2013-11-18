@@ -36,12 +36,13 @@ describe MML::Phone do
   context '#xml' do
     subject { phone.to_xml }
 
-    it {should match '<mmlPh:Phone mmlPh:equipType="PH"'}
+    it {should match '<mmlPh:Phone mmlPh:equipType="PH">'}
     it {should match '<mmlPh:area>075</mmlPh:area>'}
     it {should match '<mmlPh:city>874</mmlPh:city>'}
     it {should match '<mmlPh:number>7030</mmlPh:number>'}
     it {should match '<mmlPh:extension>123</mmlPh:extension>'}
     it {should match '<mmlPh:country>81</mmlPh:country>'}
     it {should match '<mmlPh:memo>daytime</mmlPh:memo>'}
+    it {should match '</mmlPh:Phone>'}
   end
 end
