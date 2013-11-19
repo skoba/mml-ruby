@@ -18,4 +18,5 @@ module MML
   end
 
   require_relative 'mml/common'
+  require_relative 'mml/version'
 end
