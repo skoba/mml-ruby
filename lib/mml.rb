@@ -282,21 +282,42 @@ module MML
     end
   end
 
-  class CreatorInfo
-    attr_accessor :creatorLicense, :tableId
-
-    def initialize(args = {})
-      @creatorLicense = args[:creatorLicense]
-      @tableId = args[:tableId]
-    end
-  end
-
   class CreatorLicense
     attr_accessor :tableId, :value
 
     def initialize(args = {})
       @tableId = args[:tableId]
       @value = args[:value]
+    end
+  end
+
+  class CreatorInfo
+    attr_reader :personalizedInfo, :creatorLicense
+
+    def initialize(args = {})
+      self.personalizedInfo = args[:personalizedInfo]
+      self.creatorLicense = args[:creatorLicense]
+    end
+
+    def personalizedInfo=(personalizedInfo)
+      raise ArgumentError, 'personalizedInfo is mandatory' if personalizedInfo.nil?
+      @personalizedInfo = personalizedInfo
+    end
+
+    def creatorLicense=(creatorLicense)
+      raise ArgumentError, 'creatorLicense is mandatory' if creatorLicense.nil? or creatorLicense.empty?
+      @creatorLicense = creatorLicense
+    end
+
+    def to_xml
+      xb= Builder::XmlMarkup.new
+      xb.mmlCi :CreatorInfo do
+        xb << personalizedInfo.to_xml
+        creatorLicense.each do |license|
+          attributes = {'mmlCi:tableId' => license.tableId} if license.tableId
+          xb.mmlCi :creatorLicense, license.value, attributes
+        end
+      end
     end
   end
 end
