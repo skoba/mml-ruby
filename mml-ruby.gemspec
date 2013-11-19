@@ -5,12 +5,12 @@ require 'mml/version'
 
 Gem::Specification.new do |spec|
   spec.name          = "mml-ruby"
-  spec.version       = Mml::Ruby::VERSION
+  spec.version       = MML::VERSION
   spec.authors       = ["Shinji KOBAYASHI"]
   spec.email         = ["skoba@moss.gr.jp"]
   spec.description   = %q{Ruby implementation of MML(Medical Markup Language) library}
   spec.summary       = %q{MML implementation by Ruby}
-  spec.homepage      = ""
+  spec.homepage      = "https://github.com/skoba/mml-ruby"
   spec.license       = "Apache2"
 
   spec.files         = `git ls-files`.split($/)
