@@ -1,12 +1,12 @@
 describe MML::Phone do
-  let(:phone) { MML::Phone.new(equipType: 'PH', area: '075', city: '874', number: '7030', extension: '123', country: '81', memo: 'daytime') }
+  let(:phone) { MML::Phone.new(telEquipType: 'PH', area: '075', city: '874', number: '7030', extension: '123', country: '81', memo: 'daytime') }
 
   it 'should be an instance of MML::Phone' do
     expect(phone).to be_an_instance_of MML::Phone
   end
 
   it 'equipType should be properly assigned' do
-    expect(phone.equipType).to eq 'PH'
+    expect(phone.telEquipType).to eq 'PH'
   end
 
   it 'area number should be assigned properly' do
@@ -36,7 +36,7 @@ describe MML::Phone do
   context '#xml' do
     subject { phone.to_xml }
 
-    it {should match '<mmlPh:Phone mmlPh:equipType="PH">'}
+    it {should match '<mmlPh:Phone mmlPh:telEquipType="PH">'}
     it {should match '<mmlPh:area>075</mmlPh:area>'}
     it {should match '<mmlPh:city>874</mmlPh:city>'}
     it {should match '<mmlPh:number>7030</mmlPh:number>'}

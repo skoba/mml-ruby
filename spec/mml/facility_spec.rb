@@ -31,6 +31,10 @@ describe MML::Facility do
     expect(facility.id.value).to eq '12345'
   end
 
+  it 'id is not mandatory' do
+    expect {facility.id = nil}.not_to raise_error
+  end
+
   context '#to_xml' do
     subject { facility.to_xml}
 

@@ -13,10 +13,22 @@ describe MML::Department do
     it 'name should assigned properly' do
       expect(department_name.value).to eq 'Cardiovascular Surgery'
     end
+
+    it 'name shold not be nil' do
+      expect {department.name = nil}.to raise_error ArgumentError
+    end
+
+    it 'name should not be empty' do
+      expect {department.name = []}.to raise_error ArgumentError
+    end
   end
 
   it 'id should be properyl assigned' do
     expect(department.id.value).to eq '16'
+  end
+
+  it 'id is not mandatory' do
+    expect { department.id = nil}.not_to raise_error
   end
 
   context "#to_xml" do

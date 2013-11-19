@@ -17,27 +17,6 @@ module MML
     VERSION = '2.3'
   end
 
-  class CreatorInfo
-    attr_accessor :creatorLicense, :tableId
-
-    def initialize(args = {})
-      @creatorLicense = args[:creatorLicense]
-      @tableId = args[:tableId]
-    end
-  end
-
-  class CreatorLicense
-    attr_accessor :tableId, :value
-
-    def initialize(args = {})
-      @tableId = args[:tableId]
-      @value = args[:value]
-    end
-  end
-
-  class PersonalizedInfo
-    
-  end
 
   class BaseName
     attr_reader :value, :repCode
@@ -187,17 +166,17 @@ module MML
   end
 
   class Phone
-    attr_accessor :equipType, :area, :city, :number, :extension, :country, :memo
+    attr_accessor :telEquipType, :area, :city, :number, :extension, :country, :memo
 
     def initialize(args = {})
-      %W(equipType area city number extension country memo).each do |item|
+      %W(telEquipType area city number extension country memo).each do |item|
         self.send("#{item}=", args[item.to_sym])
       end
     end
 
     def to_xml
       xb = Builder::XmlMarkup.new
-      attributes = {'mmlPh:equipType' => equipType} if equipType
+      attributes = {'mmlPh:telEquipType' => telEquipType} if telEquipType
       xb.mmlPh :Phone, attributes do
         xb.mmlPh :area, area if area
         xb.mmlPh :city, city if city
@@ -232,7 +211,7 @@ module MML
           attributes['mmlFc:tableId'] = n.tableId if n.tableId
           xb.mmlFc :name, n.value, attributes
         end
-        xb << id.to_xml
+        xb << id.to_xml if id
       end
     end
   end
@@ -250,8 +229,74 @@ module MML
           attributes['mmlDp:tableId'] = n.tableId if n.tableId
           xb.mmlDp :name, n.value, attributes
         end
-        xb << id.to_xml
+        xb << id.to_xml if id
       end
+    end
+  end
+
+  class PersonalizedInfo
+    attr_reader :id, :personName
+    attr_accessor :facility, :department, :addresses, :emailAddresses, :phones
+
+    def initialize(args = {})
+      %W(id personName facility department addresses emailAddresses phones).each do |item|
+        send "#{item}=", args[item.to_sym]
+      end
+    end
+
+    def id=(id)
+      @id = id
+    end
+
+    def personName=(personName)
+      @personName = personName
+    end
+
+    def to_xml
+      xb = Builder::XmlMarkup.new
+      xb.mmlPsi :PersonalizedInfo do
+        xb << id.to_xml
+        xb.mmlPsi :personName do
+          personName.each do |n|
+            xb << n.to_xml
+          end
+        end
+        xb << facility.to_xml if facility
+        xb << department.to_xml if department
+        xb.mmlPsi :addresses do
+          addresses.each do |address|
+            xb << address.to_xml
+          end
+        end if addresses
+        xb.mmlPsi :emailAddresses do
+          emailAddresses.each do |email|
+            xb.mmlCm :email, email
+          end
+        end if emailAddresses
+        xb.mmlPsi :phones do
+          phones.each do |phone|
+            xb << phone.to_xml
+          end
+        end if phones
+      end
+    end
+  end
+
+  class CreatorInfo
+    attr_accessor :creatorLicense, :tableId
+
+    def initialize(args = {})
+      @creatorLicense = args[:creatorLicense]
+      @tableId = args[:tableId]
+    end
+  end
+
+  class CreatorLicense
+    attr_accessor :tableId, :value
+
+    def initialize(args = {})
+      @tableId = args[:tableId]
+      @value = args[:value]
     end
   end
 end
