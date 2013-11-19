@@ -39,25 +39,45 @@ module MML
     
   end
 
-  class Name
-    attr_reader :repCode
-    attr_accessor :tableId, :family, :given, :middle, :fullname, :prefix, :degree
+  class BaseName
+    attr_reader :value, :repCode
+    attr_accessor :tableId
 
-    def initialize(args = {})
-      @tableId = args[:tableId]
-      self.repCode = args[:repCode]
-      @family = args[:family]
-      @given = args[:given]
-      @middle = args[:middle]
-      @fullname = args[:fullname]
-      @prefix = args[:prefix]
-      @degree = args[:degree]
+    def initialize(args ={})
+      %W(value repCode tableId).each do |item|
+        self.send("#{item}=", args[item.to_sym])
+      end      
+    end
+
+    def value=(value)
+      raise ArgumentError, 'value is mandatory' if value.nil?
+      @value = value
     end
 
     def repCode=(repCode)
-      raise ArgumentError, 'repCode is nil' if repCode.nil?
+      raise ArgumentError, 'repCode is mandatory' if repCode.nil?
       @repCode = repCode
     end
+  end
+
+  class FacilityName < BaseName
+
+  end
+
+  class DepartmentName < BaseName
+
+  end
+
+  class Name < BaseName
+    attr_accessor :family, :given, :middle, :fullname, :prefix, :degree
+
+    def initialize(args = {})
+      %W(family given middle fullname prefix degree repCode tableId).each do |item|
+        self.send("#{item}=", args[item.to_sym])
+      end
+    end
+
+    undef value=
 
     def to_xml
       xb = Builder::XmlMarkup.new
@@ -217,24 +237,21 @@ module MML
     end
   end
 
-  class FacilityName
-    attr_reader :value, :repCode
-    attr_accessor :tableId
-
-    def initialize(args ={})
-      %W(value repCode tableId).each do |item|
-        self.send("#{item}=", args[item.to_sym])
-      end      
+  class Department < Facility
+    def initialize(args = {})
+      super
     end
 
-    def value=(value)
-      raise ArgumentError, 'value is mandatory' if value.nil?
-      @value = value
-    end
-
-    def repCode=(repCode)
-      raise ArgumentError, 'repCode is mandatory' if repCode.nil?
-      @repCode = repCode
+    def to_xml
+      xb = Builder::XmlMarkup.new
+      xb.mmlDp :Department do
+        name.each do |n|
+          attributes = { 'mmlDp:repCode' => n.repCode}
+          attributes['mmlDp:tableId'] = n.tableId if n.tableId
+          xb.mmlDp :name, n.value, attributes
+        end
+        xb << id.to_xml
+      end
     end
   end
 end
