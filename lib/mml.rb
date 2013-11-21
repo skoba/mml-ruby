@@ -23,7 +23,7 @@ module MML
 
     def initialize(args = {})
       args.keys.each do |item|
-        send "#{item}=".to_sym, args[item.to_sym]
+        send "#{item.to_s}=", args[item]
       end
     end
 
@@ -44,6 +44,22 @@ module MML
 
     def sex=(sex)
       @sex = sex
+    end
+  end
+
+  class Nationality
+    attr_reader :value
+    attr_accessor :subtype
+
+    def initialize(args)
+      args.keys.each do |item|
+        send "#{item.to_s}=", args[item]
+      end      
+    end
+
+    def value=(value)
+      raise ArgumentError if value.nil?
+      @value=value
     end
   end
 
