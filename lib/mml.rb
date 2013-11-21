@@ -18,14 +18,32 @@ module MML
   end
 
   class PatientInfo
-    attr_reader :masterId
+    attr_reader :masterId, :personName, :birthday, :sex
+    attr_accessor :otherId
 
     def initialize(args = {})
-      self.masterId = args[:masterId]
+      args.keys.each do |item|
+        send "#{item}=".to_sym, args[item.to_sym]
+      end
     end
 
     def masterId=(masterId)
+      raise ArgumentError, 'masterId is mandatory' if masterId.nil?
       @masterId = masterId
+    end
+
+    def personName=(personName)
+      raise ArgumentError, 'personName is mandatory' if personName.nil? or personName.empty?
+      @personName = personName
+    end
+
+    def birthday=(birthday)
+      raise ArgumentError, 'birthday is mandatory' if birthday.nil?
+      @birthday = birthday
+    end
+
+    def sex=(sex)
+      @sex = sex
     end
   end
 
