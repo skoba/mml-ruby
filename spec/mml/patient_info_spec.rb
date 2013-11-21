@@ -2,7 +2,11 @@ describe MML::PatientInfo do
   let(:master_id) { MML::Id.new(value: '0001', type: 'facility', repCode: 'A', tableId: 'MML0024') }
   let(:other_id) { MML::Id.new(value: '000A', type: 'spouseId', repCode: 'A', tableId: 'MML0024') }
   let(:person_name) { MML::Name.new(repCode: 'A', fullname: 'Shinji KOBAYASHI')}
-  let(:patient_info) { MML::PatientInfo.new(masterId: master_id, otherId: [other_id], personName: [person_name], birthday: '1970-04-19', sex: 'male') }
+  let(:nationality) { MML::Nationality.new(value: 'JPN', subtype: 'USA') } # for rspec, not real
+  let(:address) { MML::Address.new(repCode: 'A', addressClass: 'business', tableId: 'MML0025', full: '506, Dept. 9, Kyoto Research Park (KRP), Awata-cho 91, Chudoji, Shimogyo-ku, Kyoto-city')}
+  let(:email) { 'skoba@mmlexample.net' }
+  let(:phone) { MML::Phone.new(telEquipType: 'PH', area: '075', city: '874', number: '7030') }
+  let(:patient_info) { MML::PatientInfo.new(masterId: master_id, otherId: [other_id], personName: [person_name], birthday: '1970-04-19', sex: 'male', nationality: nationality, marital: 'married', addresses: [address], emailAddresses: [email], phones: [phone], accountNumber: 'ABC0123') }
 
   it 'should be an instance of MML::PatientInfo' do
     expect(patient_info).to be_an_instance_of MML::PatientInfo
@@ -41,5 +45,29 @@ describe MML::PatientInfo do
 
   it 'sex(gender) should be described' do
     expect(patient_info.sex).to eq 'male'
+  end
+
+  it 'nationality should be assigned properly' do
+    expect(patient_info.nationality.value).to eq 'JPN'
+  end
+
+  it 'marital should be assigned properly. not real' do
+    expect(patient_info.marital).to eq 'married'
+  end
+
+  it 'address should be properly assigned' do
+    expect(patient_info.addresses[0].addressClass).to eq 'business'
+  end
+
+  it 'emailAddresses should be assigned properly' do
+    expect(patient_info.emailAddresses[0]).to eq 'skoba@mmlexample.net'
+  end
+
+  it 'phones should be properly assigned' do
+    expect(patient_info.phones[0].city).to eq '874'
+  end
+
+  it 'accountNumber should be assigned properly' do
+    expect(patient_info.accountNumber).to eq 'ABC0123'
   end
 end

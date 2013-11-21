@@ -19,7 +19,7 @@ module MML
 
   class PatientInfo
     attr_reader :masterId, :personName, :birthday, :sex
-    attr_accessor :otherId
+    attr_accessor :otherId, :nationality, :marital, :addresses, :emailAddresses, :phones, :accountNumber
 
     def initialize(args = {})
       args.keys.each do |item|
