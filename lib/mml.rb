@@ -17,6 +17,9 @@ module MML
     VERSION = '2.3'
   end
 
+  class PatientInfo
+  end
+
   require_relative 'mml/common'
   require_relative 'mml/version'
 end
