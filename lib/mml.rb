@@ -18,6 +18,15 @@ module MML
   end
 
   class PatientInfo
+    attr_reader :masterId
+
+    def initialize(args = {})
+      self.masterId = args[:masterId]
+    end
+
+    def masterId=(masterId)
+      @masterId = masterId
+    end
   end
 
   require_relative 'mml/common'
