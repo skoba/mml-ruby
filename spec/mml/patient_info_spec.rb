@@ -1,6 +1,6 @@
 describe MML::PatientInfo do
   let(:master_id) { MML::Id.new(value: '0001', type: 'facility', repCode: 'A', tableId: 'MML0024') }
-  let(:other_id) { MML::Id.new(value: '000A', type: 'spouseId', repCode: 'A', tableId: 'MML0024') }
+  let(:other_id) { MML::OtherId.new(type: 'spouseId', id: MML::Id.new(value: '000A', type: 'facility', repCode: 'A', tableId: 'MML0024')) }
   let(:person_name) { MML::Name.new(repCode: 'A', fullname: 'Shinji KOBAYASHI')}
   let(:nationality) { MML::Nationality.new(value: 'JPN', subtype: 'USA') } # for rspec, not real
   let(:address) { MML::Address.new(repCode: 'A', addressClass: 'business', tableId: 'MML0025', full: '506, Dept. 9, Kyoto Research Park (KRP), Awata-cho 91, Chudoji, Shimogyo-ku, Kyoto-city')}
@@ -21,7 +21,7 @@ describe MML::PatientInfo do
     expect {patient_info.masterId = nil}.to raise_error ArgumentError
   end
   it 'otherId should be assigned properly' do
-    expect(patient_info.otherId[0].value).to eq '000A'
+    expect(patient_info.otherId[0].id.value).to eq '000A'
   end
 
   it 'personName should be assigned properly' do
@@ -84,6 +84,14 @@ describe MML::PatientInfo do
     subject { patient_info.to_xml }
 
     it {should match '<mmlPi:PatientModule>'}
+    it {should match '<mmlPi:uniqueInfo>'}
+    it {should match '<mmlPi:masterId>'}
+    it {should match '<mmlCm:Id'}
+    it {should match '>0001</mmlCm:Id>'}
+    it {should match '</mmlPi:masterId>'}
+    it {should match '<mmlPi:otherId mmlPi:type="spouseId"'}
+    it {should match '>000A</mmlCm:Id>'}
+    it {should match '</mmlPi:uniqueInfo>'}
     it {should match '</mmlPi:PatientModule>'}
   end
 end

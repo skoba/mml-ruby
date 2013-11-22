@@ -18,6 +18,13 @@ module MML
     def xml
       @xml ||= Builder::XmlMarkup.new
     end
+
+    def nil_check(value)
+      raise ArgumentError, "#{caller} mandatory" if value.nil?
+    end
+    def blank_check(value)
+      raise ArgumentError, "#{caller} mandatory" if value.nil? or value.empty?
+    end
   end
 
   class V2Base < Base
@@ -49,8 +56,31 @@ module MML
 
     def to_xml
       xml.mmlPi :PatientModule do
-        
+        xml.mmlPi :uniqueInfo do
+          xml.mmlPi :masterId do
+            xml << masterId.to_xml
+          end
+          otherId.each do |item|
+            xml.mmlPi(:otherId, {'mmlPi:type' => item.type}) do            
+              xml << item.id.to_xml
+            end
+          end if otherId
+        end
       end
+    end
+  end
+
+  class OtherId < Base
+    attr_reader :id, :type
+
+    def id=(id)
+      nil_check id
+      @id = id
+    end
+
+    def type=(type)
+      blank_check type
+      @type=type
     end
   end
 
