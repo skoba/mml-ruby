@@ -4,28 +4,29 @@ module MML
   MML_NAMESPACE = 'xmlns:mml="http://www.medxml.net/MML"'
 
   class Base
-    def namespace
-      MML_NAMESPACE
-    end
-
-    def to_xml
-      @xb = Builder::XmlMarkup.new
-    end
-  end
-
-  class V2Base < Base
-    VERSION = '2.3'
-  end
-
-  class PatientInfo
-    attr_reader :masterId, :personName, :birthday, :sex
-    attr_accessor :otherId, :nationality, :marital, :addresses, :emailAddresses, :phones, :accountNumber
-
     def initialize(args = {})
       args.keys.each do |item|
         send "#{item.to_s}=", args[item]
       end
     end
+
+    def namespace
+      MML_NAMESPACE
+    end
+
+    private
+    def xml
+      @xml ||= Builder::XmlMarkup.new
+    end
+  end
+
+  class V2Base < Base
+    MML_VERSION = '2.3'
+  end
+
+  class PatientInfo < Base
+    attr_reader :masterId, :personName, :birthday, :sex
+    attr_accessor :otherId, :nationality, :marital, :addresses, :emailAddresses, :phones, :accountNumber, :socialIdentification, :death
 
     def masterId=(masterId)
       raise ArgumentError, 'masterId is mandatory' if masterId.nil?
@@ -45,6 +46,12 @@ module MML
     def sex=(sex)
       @sex = sex
     end
+
+    def to_xml
+      xml.mmlPi :PatientModule do
+        
+      end
+    end
   end
 
   class Nationality
@@ -60,6 +67,21 @@ module MML
     def value=(value)
       raise ArgumentError if value.nil?
       @value=value
+    end
+  end
+
+  class Death
+    attr_reader :flag
+    attr_accessor :date
+
+    def initialize(args)
+      args.keys.each do |item|
+        send "#{item.to_s}=", args[item]
+      end
+    end
+
+    def flag=(flag)
+      @flag = flag
     end
   end
 

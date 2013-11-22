@@ -6,7 +6,8 @@ describe MML::PatientInfo do
   let(:address) { MML::Address.new(repCode: 'A', addressClass: 'business', tableId: 'MML0025', full: '506, Dept. 9, Kyoto Research Park (KRP), Awata-cho 91, Chudoji, Shimogyo-ku, Kyoto-city')}
   let(:email) { 'skoba@mmlexample.net' }
   let(:phone) { MML::Phone.new(telEquipType: 'PH', area: '075', city: '874', number: '7030') }
-  let(:patient_info) { MML::PatientInfo.new(masterId: master_id, otherId: [other_id], personName: [person_name], birthday: '1970-04-19', sex: 'male', nationality: nationality, marital: 'married', addresses: [address], emailAddresses: [email], phones: [phone], accountNumber: 'ABC0123') }
+  let(:death) { MML::Death.new(flag: false)}
+  let(:patient_info) { MML::PatientInfo.new(masterId: master_id, otherId: [other_id], personName: [person_name], birthday: '1970-04-19', sex: 'male', nationality: nationality, marital: 'married', addresses: [address], emailAddresses: [email], phones: [phone], accountNumber: 'ABC0123', socialIdentification: 'KYO4567', death: death) }
 
   it 'should be an instance of MML::PatientInfo' do
     expect(patient_info).to be_an_instance_of MML::PatientInfo
@@ -69,5 +70,20 @@ describe MML::PatientInfo do
 
   it 'accountNumber should be assigned properly' do
     expect(patient_info.accountNumber).to eq 'ABC0123'
+  end
+
+  it 'socialNumber should be assigned properly' do
+    expect(patient_info.socialIdentification).to eq 'KYO4567'
+  end
+
+  it 'death flag should be assigned porperly' do
+    expect(patient_info.death.flag).to be_false
+  end
+
+  context '#to_xml' do
+    subject { patient_info.to_xml }
+
+    it {should match '<mmlPi:PatientModule>'}
+    it {should match '</mmlPi:PatientModule>'}
   end
 end
