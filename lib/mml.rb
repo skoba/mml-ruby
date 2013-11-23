@@ -61,11 +61,35 @@ module MML
             xml << masterId.to_xml
           end
           otherId.each do |item|
-            xml.mmlPi(:otherId, {'mmlPi:type' => item.type}) do            
+            xml.mmlPi :otherId, {'mmlPi:type' => item.type} do
               xml << item.id.to_xml
             end
           end if otherId
         end
+        personName.each do |name|
+          xml.mmlPi :personName do
+            xml << name.to_xml
+          end
+        end
+        xml.mmlPi :birthday, birthday
+        xml.mmlPi :sex, sex
+        xml.mmlPi :nationality, nationality.value, {'mmlPi:subtype' => nationality.subtype} if nationality
+        xml.mmlPi :marital, marital
+        xml.mmlPi :addresses do
+          addresses.each do |address|
+            xml << address.to_xml
+          end
+        end if addresses
+        xml.mmlPi :emailAddresses do
+          emailAddresses.each do |email|
+            xml.mmlCm :email, email
+          end if emailAddresses
+        end if emailAddresses
+        xml.mmlPi :phones do
+          phones.each do |phone|
+            xml << phone.to_xml
+          end
+        end if phones
       end
     end
   end

@@ -92,6 +92,30 @@ describe MML::PatientInfo do
     it {should match '<mmlPi:otherId mmlPi:type="spouseId"'}
     it {should match '>000A</mmlCm:Id>'}
     it {should match '</mmlPi:uniqueInfo>'}
+    it {should match '<mmlPi:personName>'}
+    it {should match '<mmlNm:Name'}
+    it {should match '<mmlNm:fullname>Shinji KOBAYASHI</mmlNm:fullname>'}
+    it {should match '</mmlNm:Name>'}
+    it {should match '</mmlPi:personName>'}
+    it {should match '<mmlPi:birthday>1970-04-19</mmlPi:birthday>'}
+    it {should match '<mmlPi:sex>male</mmlPi:sex>'}
+    it {should match '<mmlPi:nationality mmlPi:subtype="USA"'}
+    it {should match '>JPN</mmlPi:nationality>'}
+    it {should match '<mmlPi:marital>married</mmlPi:marital>'}
+    it {should match '<mmlPi:addresses>'}
+    it {should match '<mmlAd:Address'}
+    it {should match '<mmlAd:full>506, Dept.'}
+    it {should match 'Kyoto-city</mmlAd:full>'}
+    it {should match '</mmlAd:Address>'}
+    it {should match '</mmlPi:addresses>'}
+    it {should match '<mmlPi:emailAddresses>'}
+    it {should match '<mmlCm:email>skoba@mmlexample.net</mmlCm:email>'}
+    it {should match '</mmlPi:emailAddresses>'}
+    it {should match '<mmlPi:phones>'}
+    it {should match '<mmlPh:Phone mmlPh:telEquipType="PH">'}
+    it {should match '<mmlPh:area>075</mmlPh:area>'}
+    it {should match '</mmlPh:Phone>'}
+    it {should match '</mmlPi:phones>'}
     it {should match '</mmlPi:PatientModule>'}
   end
 end
