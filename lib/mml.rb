@@ -90,6 +90,10 @@ module MML
             xml << phone.to_xml
           end
         end if phones
+        xml.mmlPi :accountNumber, accountNumber if accountNumber
+        xml.mmlPi :socialIdentification, socialIdentification if socialIdentification
+        death_attr = {'mmlPi:date' => death.date} if death.date
+        xml.mmlPi :death, death.flag.to_s, death_attr unless death.nil?
       end
     end
   end

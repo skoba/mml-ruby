@@ -116,6 +116,9 @@ describe MML::PatientInfo do
     it {should match '<mmlPh:area>075</mmlPh:area>'}
     it {should match '</mmlPh:Phone>'}
     it {should match '</mmlPi:phones>'}
+    it {should match '<mmlPi:accountNumber>ABC0123</mmlPi:accountNumber>'}
+    it {should match '<mmlPi:socialIdentification>KYO4567</mmlPi:socialIdentification>'}
+    it {should match '<mmlPi:death>false</mmlPi:death>'}
     it {should match '</mmlPi:PatientModule>'}
   end
 end
