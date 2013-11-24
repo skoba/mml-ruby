@@ -143,6 +143,14 @@ module MML
     end
   end
 
+  class Race
+
+  end
+
+  class Insurance
+    
+  end
+
   require_relative 'mml/common'
   require_relative 'mml/version'
 end
