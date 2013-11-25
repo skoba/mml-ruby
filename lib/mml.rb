@@ -161,8 +161,28 @@ module MML
     end
   end
 
-  class Insurance
+  class Insurance < Base
+    attr_accessor :countryType
     
+  end
+
+  class InsuranceClass < Base
+    attr_reader :value, :classCode, :tableId
+
+    def value=(value)
+      nil_check value
+      @value = value
+    end
+
+    def classCode=(classCode)
+      nil_check classCode
+      @classCode = classCode
+    end
+
+    def tableId=(tableId)
+      nil_check tableId
+      @tableId = tableId
+    end
   end
 
   require_relative 'mml/common'
