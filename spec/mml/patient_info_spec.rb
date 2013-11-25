@@ -33,10 +33,6 @@ describe MML::PatientInfo do
     expect { patient_info.personName = nil }.to raise_error ArgumentError
   end
 
-  it 'personName should not be empty' do
-    expect { patient_info.personName = [] }.to raise_error ArgumentError
-  end
-
   it 'birthday should be assigned properly' do
     expect(patient_info.birthday).to eq '1970-04-19'
   end

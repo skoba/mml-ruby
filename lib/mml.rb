@@ -14,23 +14,10 @@ module MML
       MML_NAMESPACE
     end
 
-    private
-    def xml
-      @xml ||= Builder::XmlMarkup.new
-    end
-
-    def nil_check(value)
-      raise ArgumentError, "#{caller} mandatory" if value.nil?
-    end
-
-    def blank_check(value)
-      raise ArgumentError, "#{caller} mandatory" if value.nil? or value.empty?
-    end
-
     class << self
       alias optional_attribute attr_accessor
 
-      def not_nil_attribute(*attrs)
+      def mandatory_attribute(*attrs)
         attrs.each do |attr|
           class_eval %{
             attr_reader attr
@@ -42,19 +29,11 @@ module MML
           }
         end
       end
+    end
 
-      def not_nil_or_empty_attribute(*attrs)
-        attrs.each do |attr|
-          class_eval %{
-            attr_reader attr
-            
-            def #{attr}=(value)
-              raise ArgumentError, '#{attr} is mandatory' if value.nil? or value.empty?
-              @#{attr}=value
-            end
-          }
-        end
-      end
+    private
+    def xml
+      @xml ||= Builder::XmlMarkup.new
     end
   end
 
@@ -63,8 +42,7 @@ module MML
   end
 
   class PatientInfo < Base
-    not_nil_attribute :masterId, :birthday, :sex
-    not_nil_or_empty_attribute :personName
+    mandatory_attribute :masterId, :personName, :birthday, :sex
     optional_attribute :otherId, :nationality, :race, :marital, :addresses, :emailAddresses, :phones, :accountNumber, :socialIdentification, :death
 
     def to_xml
@@ -120,32 +98,35 @@ module MML
   end
 
   class OtherId < Base
-    not_nil_attribute :id
-    not_nil_or_empty_attribute :type
+    mandatory_attribute :id, :type
   end
 
   class Nationality < Base
     optional_attribute :subtype
-    not_nil_attribute :value
+    mandatory_attribute :value
   end
 
   class Death < Base
-    not_nil_attribute :flag
+    mandatory_attribute :flag
     optional_attribute :date
   end
 
   class Race < Base
-    attr_accessor :raceCode, :raceCodeId
-    not_nil_attribute :value
+    optional_attribute :raceCode, :raceCodeId
+    mandatory_attribute :value
   end
 
   class Insurance < Base
-    attr_accessor :countryType, :insuranceClass, :insuranceNumber
-    not_nil_attribute :group
+    optional_attribute :countryType, :insuranceClass, :insuranceNumber, :personName
+    mandatory_attribute :group, :number, :familyClass
   end
 
   class InsuranceClass < Base
-    not_nil_attribute :value, :classCode, :tableId
+    mandatory_attribute :value, :classCode, :tableId
+  end
+
+  class InsuranceClient < Base
+    optional_attribute :personName, :addresses, :phones
   end
 
   require_relative 'mml/common'
