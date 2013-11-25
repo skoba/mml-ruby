@@ -77,10 +77,10 @@ describe MML::Insurance do
   end
 
   it 'paymentInRatio should be assigned properly' do
-    expect(insurance.paymentInRatio).to be 0.2
+    expect(insurance.paymentInRatio).to eq 0.2
   end
 
   it 'paymentOutRatio should be assigned properly' do
-    expect(insurance.paymentOutRatio).to be 0.3
+    expect(insurance.paymentOutRatio).to eq 0.3
   end
 end
