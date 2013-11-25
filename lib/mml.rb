@@ -22,8 +22,39 @@ module MML
     def nil_check(value)
       raise ArgumentError, "#{caller} mandatory" if value.nil?
     end
+
     def blank_check(value)
       raise ArgumentError, "#{caller} mandatory" if value.nil? or value.empty?
+    end
+
+    class << self
+      alias optional_attribute attr_accessor
+
+      def not_nil_attribute(*attrs)
+        attrs.each do |attr|
+          class_eval %{
+            attr_reader attr
+            
+            def #{attr}=(value)
+              raise ArgumentError, '#{attr} is mandatory' if value.nil?
+              @#{attr}=value
+            end
+          }
+        end
+      end
+
+      def not_nil_or_empty_attribute(*attrs)
+        attrs.each do |attr|
+          class_eval %{
+            attr_reader attr
+            
+            def #{attr}=(value)
+              raise ArgumentError, '#{attr} is mandatory' if value.nil? or value.empty?
+              @#{attr}=value
+            end
+          }
+        end
+      end
     end
   end
 
@@ -32,27 +63,9 @@ module MML
   end
 
   class PatientInfo < Base
-    attr_reader :masterId, :personName, :birthday, :sex
-    attr_accessor :otherId, :nationality, :race, :marital, :addresses, :emailAddresses, :phones, :accountNumber, :socialIdentification, :death
-
-    def masterId=(masterId)
-      raise ArgumentError, 'masterId is mandatory' if masterId.nil?
-      @masterId = masterId
-    end
-
-    def personName=(personName)
-      raise ArgumentError, 'personName is mandatory' if personName.nil? or personName.empty?
-      @personName = personName
-    end
-
-    def birthday=(birthday)
-      raise ArgumentError, 'birthday is mandatory' if birthday.nil?
-      @birthday = birthday
-    end
-
-    def sex=(sex)
-      @sex = sex
-    end
+    not_nil_attribute :masterId, :birthday, :sex
+    not_nil_or_empty_attribute :personName
+    optional_attribute :otherId, :nationality, :race, :marital, :addresses, :emailAddresses, :phones, :accountNumber, :socialIdentification, :death
 
     def to_xml
       xml.mmlPi :PatientModule do
@@ -107,82 +120,32 @@ module MML
   end
 
   class OtherId < Base
-    attr_reader :id, :type
-
-    def id=(id)
-      nil_check id
-      @id = id
-    end
-
-    def type=(type)
-      blank_check type
-      @type=type
-    end
+    not_nil_attribute :id
+    not_nil_or_empty_attribute :type
   end
 
-  class Nationality
-    attr_reader :value
-    attr_accessor :subtype
-
-    def initialize(args)
-      args.keys.each do |item|
-        send "#{item.to_s}=", args[item]
-      end      
-    end
-
-    def value=(value)
-      raise ArgumentError if value.nil?
-      @value=value
-    end
+  class Nationality < Base
+    optional_attribute :subtype
+    not_nil_attribute :value
   end
 
-  class Death
-    attr_reader :flag
-    attr_accessor :date
-
-    def initialize(args)
-      args.keys.each do |item|
-        send "#{item.to_s}=", args[item]
-      end
-    end
-
-    def flag=(flag)
-      @flag = flag
-    end
+  class Death < Base
+    not_nil_attribute :flag
+    optional_attribute :date
   end
 
   class Race < Base
     attr_accessor :raceCode, :raceCodeId
-    attr_reader :value
-
-    def value=(value)
-      nil_check value
-      @value = value
-    end
+    not_nil_attribute :value
   end
 
   class Insurance < Base
-    attr_accessor :countryType
-    
+    attr_accessor :countryType, :insuranceClass, :insuranceNumber
+    not_nil_attribute :group
   end
 
   class InsuranceClass < Base
-    attr_reader :value, :classCode, :tableId
-
-    def value=(value)
-      nil_check value
-      @value = value
-    end
-
-    def classCode=(classCode)
-      nil_check classCode
-      @classCode = classCode
-    end
-
-    def tableId=(tableId)
-      nil_check tableId
-      @tableId = tableId
-    end
+    not_nil_attribute :value, :classCode, :tableId
   end
 
   require_relative 'mml/common'
