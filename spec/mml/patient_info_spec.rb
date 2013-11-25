@@ -3,11 +3,12 @@ describe MML::PatientInfo do
   let(:other_id) { MML::OtherId.new(type: 'spouseId', id: MML::Id.new(value: '000A', type: 'facility', repCode: 'A', tableId: 'MML0024')) }
   let(:person_name) { MML::Name.new(repCode: 'A', fullname: 'Shinji KOBAYASHI')}
   let(:nationality) { MML::Nationality.new(value: 'JPN', subtype: 'USA') } # for rspec, not real
+  let(:race) {MML::Race.new(value: 'Japanese', raceCode: '2039-6', raceCodeId: 'Race & Ethnicity - CDC')}
   let(:address) { MML::Address.new(repCode: 'A', addressClass: 'business', tableId: 'MML0025', full: '506, Dept. 9, Kyoto Research Park (KRP), Awata-cho 91, Chudoji, Shimogyo-ku, Kyoto-city')}
   let(:email) { 'skoba@mmlexample.net' }
   let(:phone) { MML::Phone.new(telEquipType: 'PH', area: '075', city: '874', number: '7030') }
   let(:death) { MML::Death.new(flag: false)}
-  let(:patient_info) { MML::PatientInfo.new(masterId: master_id, otherId: [other_id], personName: [person_name], birthday: '1970-04-19', sex: 'male', nationality: nationality, marital: 'married', addresses: [address], emailAddresses: [email], phones: [phone], accountNumber: 'ABC0123', socialIdentification: 'KYO4567', death: death) }
+  let(:patient_info) { MML::PatientInfo.new(masterId: master_id, otherId: [other_id], personName: [person_name], birthday: '1970-04-19', sex: 'male', nationality: nationality, race: race, marital: 'married', addresses: [address], emailAddresses: [email], phones: [phone], accountNumber: 'ABC0123', socialIdentification: 'KYO4567', death: death) }
 
   it 'should be an instance of MML::PatientInfo' do
     expect(patient_info).to be_an_instance_of MML::PatientInfo
@@ -52,6 +53,9 @@ describe MML::PatientInfo do
     expect(patient_info.nationality.value).to eq 'JPN'
   end
 
+  it 'race should be assigned properly' do
+    expect(patient_info.race.value).to eq 'Japanese'
+  end
   it 'marital should be assigned properly. not real' do
     expect(patient_info.marital).to eq 'married'
   end
@@ -101,6 +105,8 @@ describe MML::PatientInfo do
     it {should match '<mmlPi:sex>male</mmlPi:sex>'}
     it {should match '<mmlPi:nationality mmlPi:subtype="USA"'}
     it {should match '>JPN</mmlPi:nationality>'}
+    it {should match '<mmlPi:race'}
+    it {should match 'mmlPi:raceCode='}
     it {should match '<mmlPi:marital>married</mmlPi:marital>'}
     it {should match '<mmlPi:addresses>'}
     it {should match '<mmlAd:Address'}

@@ -33,7 +33,7 @@ module MML
 
   class PatientInfo < Base
     attr_reader :masterId, :personName, :birthday, :sex
-    attr_accessor :otherId, :nationality, :marital, :addresses, :emailAddresses, :phones, :accountNumber, :socialIdentification, :death
+    attr_accessor :otherId, :nationality, :race, :marital, :addresses, :emailAddresses, :phones, :accountNumber, :socialIdentification, :death
 
     def masterId=(masterId)
       raise ArgumentError, 'masterId is mandatory' if masterId.nil?
@@ -73,7 +73,15 @@ module MML
         end
         xml.mmlPi :birthday, birthday
         xml.mmlPi :sex, sex
-        xml.mmlPi :nationality, nationality.value, {'mmlPi:subtype' => nationality.subtype} if nationality
+        if nationality
+          attributes = {'mmlPi:subtype' => nationality.subtype} if nationality.subtype
+          xml.mmlPi :nationality, nationality.value, attributes
+        end
+        if race
+          attributes = {'mmlPi:raceCode' => race.raceCode} if race.raceCode
+          attributes['mmlPi:raceCodeId'] = race.raceCodeId if race.raceCodeId
+          xml.mmlPi :race, race.value, attributes
+        end
         xml.mmlPi :marital, marital
         xml.mmlPi :addresses do
           addresses.each do |address|
@@ -143,8 +151,14 @@ module MML
     end
   end
 
-  class Race
+  class Race < Base
+    attr_accessor :raceCode, :raceCodeId
+    attr_reader :value
 
+    def value=(value)
+      nil_check value
+      @value = value
+    end
   end
 
   class Insurance
