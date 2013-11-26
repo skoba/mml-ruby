@@ -1,5 +1,5 @@
 describe MML::Phone do
-  let(:phone) { MML::Phone.new(telEquipType: 'PH', area: '075', city: '874', number: '7030', extension: '123', country: '81', memo: 'daytime') }
+  let(:phone) { MML::Phone.new(telEquipType: 'PH', area: '075', city: '874', number: '7030', full: '078-874-7030(123)', extension: '123', country: '81', memo: 'daytime') }
 
   it 'should be an instance of MML::Phone' do
     expect(phone).to be_an_instance_of MML::Phone
@@ -25,6 +25,9 @@ describe MML::Phone do
     expect(phone.extension).to eq '123'
   end
 
+  it 'full should be assigned properly' do
+    expect(phone.full).to eq '078-874-7030(123)'
+  end
   it 'country code should be assigned properly' do
     expect(phone.country).to eq '81'
   end
@@ -41,6 +44,7 @@ describe MML::Phone do
     it {should match '<mmlPh:city>874</mmlPh:city>'}
     it {should match '<mmlPh:number>7030</mmlPh:number>'}
     it {should match '<mmlPh:extension>123</mmlPh:extension>'}
+    it {should match '<mmlPh:full>078-874-7030\(123\)</mmlPh:full>'}
     it {should match '<mmlPh:country>81</mmlPh:country>'}
     it {should match '<mmlPh:memo>daytime</mmlPh:memo>'}
     it {should match '</mmlPh:Phone>'}

@@ -149,10 +149,10 @@ module MML
   end
 
   class Phone
-    attr_accessor :telEquipType, :area, :city, :number, :extension, :country, :memo
+    attr_accessor :telEquipType, :area, :city, :number, :extension, :full, :country, :memo
 
     def initialize(args = {})
-      %W(telEquipType area city number extension country memo).each do |item|
+      %W(telEquipType area city number full extension country memo).each do |item|
         self.send("#{item}=", args[item.to_sym])
       end
     end
@@ -165,6 +165,7 @@ module MML
         xb.mmlPh :city, city if city
         xb.mmlPh :number, number if number
         xb.mmlPh :extension, extension if extension
+        xb.mmlPh :full, full if full
         xb.mmlPh :country, country if country
         xb.mmlPh :memo, memo if memo
       end

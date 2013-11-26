@@ -129,6 +129,10 @@ module MML
     optional_attribute :personName, :addresses, :phones
   end
 
+  class OrganizationInfo < Base
+    optional_attribute :facility, :addresses, :phones
+  end
+
   require_relative 'mml/common'
   require_relative 'mml/version'
 end

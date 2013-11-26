@@ -6,6 +6,12 @@ describe MML::Insurance do
   let(:address) { MML::Address.new(repCode: 'A', addressClass: 'business', tableId: 'MML0025', full: '506, Dept. 9, Kyoto Research Park (KRP), Awata-cho 91, Chudoji, Shimogyo-ku, Kyoto-city')}
   let(:phone) { MML::Phone.new(telEquipType: 'PH', area: '075', city: '874', number: '7030') }
   let(:client) {MML::InsuranceClient.new(personName: [name], addresses: [address], phones: [phone])}
+  let(:insured_facility_id) {MML::Id.new(type: 'insurance', tableId: 'MML0027', value: '12345')}
+  let(:insured_facility_name) {MML::Name.new(repCode: 'A', value: '宮崎市広域連合')}
+  let(:insured_facility_address) { MML::Address.new(repCode: 'A', prefecture: 'Miyazaki')}
+  let(:insured_facility_phone) {MML::Phone.new(repCode: 'A', telEquipType: 'PH', )}
+  let(:insured_facility) {MML::Facility.new(id: insured_facility_id, name: [insured_facility_name])}
+  let(:insured_info) {MML::OrganizationInfo.new()}
   let(:insurance) { MML::Insurance.new(countryType: 'JPN', insuranceClass: insurance_class, insuranceNumber: '8001', group: '宮市みへし', number: '421', familyClass: false, clientInfo: client, continuedDiseases: ['diabetes mellitus'], startDate: '2013-10-01', expiredDate: '2018-03-31', paymentInRatio: 0.2, paymentOutRatio: 0.3) }
 
   it 'should be an instance of MML::Insurance' do
@@ -83,4 +89,6 @@ describe MML::Insurance do
   it 'paymentOutRatio should be assigned properly' do
     expect(insurance.paymentOutRatio).to eq 0.3
   end
+
+  
 end
