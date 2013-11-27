@@ -18,9 +18,9 @@ describe MML::Department do
       expect {department.name = nil}.to raise_error ArgumentError
     end
 
-    it 'name should not be empty' do
-      expect {department.name = []}.to raise_error ArgumentError
-    end
+    # it 'name should not be empty' do
+    #   expect {department.name = []}.to raise_error ArgumentError
+    # end
   end
 
   it 'id should be properyl assigned' do

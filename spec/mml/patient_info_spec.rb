@@ -1,6 +1,6 @@
 describe MML::PatientInfo do
-  let(:master_id) { MML::Id.new(value: '0001', type: 'facility', repCode: 'A', tableId: 'MML0024') }
-  let(:other_id) { MML::OtherId.new(type: 'spouseId', id: MML::Id.new(value: '000A', type: 'facility', repCode: 'A', tableId: 'MML0024')) }
+  let(:master_id) { MML::Id.new(value: '0001', type: 'facility', tableId: 'MML0024') }
+  let(:other_id) { MML::OtherId.new(type: 'spouseId', id: MML::Id.new(value: '000A', type: 'facility', tableId: 'MML0024')) }
   let(:person_name) { MML::Name.new(repCode: 'A', fullname: 'Shinji KOBAYASHI')}
   let(:nationality) { MML::Nationality.new(value: 'JPN', subtype: 'USA') } # for rspec, not real
   let(:race) {MML::Race.new(value: 'Japanese', raceCode: '2039-6', raceCodeId: 'Race & Ethnicity - CDC')}
