@@ -11,8 +11,8 @@ describe MML::Insurance do
   let(:insured_facility_address) { MML::Address.new(repCode: 'A', prefecture: 'Miyazaki')}
   let(:insured_facility_phone) {MML::Phone.new(repCode: 'A', telEquipType: 'PH', )}
   let(:insured_facility) {MML::Facility.new(id: insured_facility_id, name: [insured_facility_name])}
-  let(:insured_info) {MML::OrganizationInfo.new()}
-  let(:insurance) { MML::Insurance.new(countryType: 'JPN', insuranceClass: insurance_class, insuranceNumber: '8001', group: '宮市みへし', number: '421', familyClass: false, clientInfo: client, continuedDiseases: ['diabetes mellitus'], startDate: '2013-10-01', expiredDate: '2018-03-31', paymentInRatio: 0.2, paymentOutRatio: 0.3) }
+  let(:insured_info) {MML::OrganizationInfo.new(facility: insured_facility, addresses: [insured_facility_address], phones: [insured_facility_phone])}
+  let(:insurance) { MML::Insurance.new(countryType: 'JPN', insuranceClass: insurance_class, insuranceNumber: '8001', group: '宮市みへし', number: '421', familyClass: false, clientInfo: client, continuedDiseases: ['diabetes mellitus'], startDate: '2013-10-01', expiredDate: '2018-03-31', paymentInRatio: 0.2, paymentOutRatio: 0.3, insuredInfo: insured_info) }
 
   it 'should be an instance of MML::Insurance' do
     expect(insurance).to be_an_instance_of MML::Insurance
@@ -90,5 +90,7 @@ describe MML::Insurance do
     expect(insurance.paymentOutRatio).to eq 0.3
   end
 
-  
+  it 'insured info should be assigned properly' do
+    expect(insurance.insuredInfo.facility.id.value).to eq '12345'
+  end
 end
