@@ -117,7 +117,7 @@ module MML
   end
 
   class Insurance < Base
-    optional_attribute :countryType, :insuranceClass, :insuranceNumber, :personName, :clientInfo, :continuedDiseases, :paymentInRatio, :paymentOutRatio
+    optional_attribute :countryType, :insuranceClass, :insuranceNumber, :personName, :clientInfo, :continuedDiseases, :paymentInRatio, :paymentOutRatio, :insuredInfo
     mandatory_attribute :group, :number, :familyClass, :startDate, :expiredDate
   end
 
