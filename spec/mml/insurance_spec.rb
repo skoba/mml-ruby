@@ -12,8 +12,14 @@ describe MML::Insurance do
   let(:insured_facility_phone) {MML::Phone.new(telEquipType: 'PH', full: '075-123-4567')}
   let(:insured_facility) {MML::Facility.new(id: insured_facility_id, name: [insured_facility_name])}
   let(:insured_info) {MML::OrganizationInfo.new(facility: insured_facility, addresses: [insured_facility_address], phones: [insured_facility_phone])}
-#  let(:work)
-  let(:insurance) { MML::Insurance.new(countryType: 'JPN', insuranceClass: insurance_class, insuranceNumber: '8001', group: '宮市みへし', number: '421', familyClass: false, clientInfo: client, continuedDiseases: ['diabetes mellitus'], startDate: '2013-10-01', expiredDate: '2018-03-31', paymentInRatio: 0.2, paymentOutRatio: 0.3, insuredInfo: insured_info) }
+  let(:work_facility_name) {MML::FacilityName.new(repCode: 'A', value: 'Miyazaki Univ.')}
+  let(:work_facility_id) {MML::Id.new(type: 'business', tableId: 'MML0027', value: '56789')}
+  let(:work_facility) {MML::Facility.new(id: work_facility_id, name: [work_facility_name])}
+  let(:work_address) {MML::Address.new(repCode: 'A', town: 'Kiyotake-cho')}
+  let(:work_phone) {MML::Phone.new(telEquipType: 'PH', area: '0985')}
+  let(:work_info) {MML::OrganizationInfo.new(facility: work_facility, addresses: [work_address], phones: [work_phone])}
+  let(:public_insurance_item) {MML::PublicInsuranceItem.new(priority: '1', providerName: '公費', provider: '15450034', recipient: '0009043', startDate: '1997-09-30', expiredDate: '1999-09-30', paymentRatio: 10_000, ratioType: 'fix')}
+  let(:insurance) { MML::Insurance.new(countryType: 'JPN', insuranceClass: insurance_class, insuranceNumber: '8001', group: '宮市みへし', number: '421', familyClass: false, clientInfo: client, continuedDiseases: ['diabetes mellitus'], startDate: '2013-10-01', expiredDate: '2018-03-31', paymentInRatio: 0.2, paymentOutRatio: 0.3, insuredInfo: insured_info, workInfo: work_info, publicInsurance: [public_insurance_item]) }
 
   it 'should be an instance of MML::Insurance' do
     expect(insurance).to be_an_instance_of MML::Insurance
@@ -93,5 +99,13 @@ describe MML::Insurance do
 
   it 'insured info should be assigned properly' do
     expect(insurance.insuredInfo.facility.id.value).to eq '12345'
+  end
+
+  it 'work info should be assined properly' do
+    expect(insurance.workInfo.facility.id.value).to eq '56789'
+  end
+
+  it 'public insurance item should assigned properly' do
+    expect(insurance.publicInsurance[0].provider).to eq '15450034'
   end
 end

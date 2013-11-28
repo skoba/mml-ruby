@@ -117,7 +117,7 @@ module MML
   end
 
   class Insurance < Base
-    optional_attribute :countryType, :insuranceClass, :insuranceNumber, :personName, :clientInfo, :continuedDiseases, :paymentInRatio, :paymentOutRatio, :insuredInfo
+    optional_attribute :countryType, :insuranceClass, :insuranceNumber, :personName, :clientInfo, :continuedDiseases, :paymentInRatio, :paymentOutRatio, :insuredInfo, :workInfo, :publicInsurance
     mandatory_attribute :group, :number, :familyClass, :startDate, :expiredDate
   end
 
@@ -131,6 +131,11 @@ module MML
 
   class OrganizationInfo < Base
     optional_attribute :facility, :addresses, :phones
+  end
+
+  class PublicInsuranceItem < Base
+    mandatory_attribute :priority, :provider, :recipient, :startDate, :expiredDate
+    optional_attribute :providerName, :paymentRatio, :ratioType
   end
 
   require_relative 'mml/common'
