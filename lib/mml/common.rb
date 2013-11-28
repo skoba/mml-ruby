@@ -21,7 +21,9 @@ module MML
     undef value=
 
     def to_xml
-      xml.mmlNm(:Name, {'mmlNm:repCode' => @repCode, 'mmlNm:tableId' => @tableId}) do
+      attributes = {'mmlNm:repCode' => repCode}
+      attributes[:tableId] = tableId if tableId
+      xml.mmlNm(:Name, attributes) do
         xml.mmlNm :family, @family if @family
         xml.mmlNm :middle, @middle if @middle
         xml.mmlNm :given, @given if @given

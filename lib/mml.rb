@@ -119,6 +119,62 @@ module MML
   class Insurance < Base
     optional_attribute :countryType, :insuranceClass, :insuranceNumber, :personName, :clientInfo, :continuedDiseases, :paymentInRatio, :paymentOutRatio, :insuredInfo, :workInfo, :publicInsurance
     mandatory_attribute :group, :number, :familyClass, :startDate, :expiredDate
+
+    def to_xml
+      attributes = {'mmlHi:countryType' => countryType } if countryType
+      xml.mmlHi :HealthInsuranceModule, attributes do
+        attributes = {'mmlHi:ClassCode' => '01'} if insuranceClass.classCode
+        attributes['mmlHi:tableId'] = insuranceClass.tableId if insuranceClass.tableId
+        xml.mmlHi :insuranceClass, insuranceClass.value, attributes if insuranceClass
+        xml.mmlHi :insuranceNumber, insuranceNumber
+        xml.mmlHi :clientId do
+          xml.mmlHi :group, group
+          xml.mmlHi :number, number
+        end
+        xml.mmlHi :familyClass, familyClass
+        xml.mmlHi :clientInfo do
+          xml.mmlHi :personName do
+            clientInfo.personName.each do |name|
+              xml << name.to_xml
+            end
+          end if clientInfo.personName
+          xml.mmlHi :addresses do
+            clientInfo.addresses.each do |address|
+              xml << address.to_xml
+            end
+          end if clientInfo.addresses
+          xml.mmlHi :phones do
+            clientInfo.phones.each do |phone|
+              xml << phone.to_xml
+            end
+          end if clientInfo.phones
+        end if clientInfo
+        xml.mmlHi :continuedDiseases do
+          continuedDiseases.each do |disease|
+            xml.mmlHi :disease, disease
+          end
+        end if continuedDiseases
+        xml.mmlHi :startDate, startDate
+        xml.mmlHi :expiredDate, expiredDate
+        xml.mmlHi :paymentInRatio, paymentInRatio if paymentInRatio
+        xml.mmlHi :paymentOutRatio, paymentOutRatio if paymentOutRatio
+        xml.mmlHi :insuredInfo do
+          xml.mmlHi :facility do
+            xml << insuredInfo.facility.to_xml if insuredInfo.facility
+          end if insuredInfo.facility
+          xml.mmlHi :addresses do
+            insuredInfo.addresses.each do |address|
+              xml << address.to_xml
+            end
+          end if insuredInfo.addresses
+          xml.mmlHi :phones do
+            insuredInfo.phones.each do |phone|
+              xml << phone.to_xml
+            end
+          end if insuredInfo.phones
+        end if insuredInfo
+      end
+    end
   end
 
   class InsuranceClass < Base

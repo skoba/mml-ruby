@@ -108,4 +108,58 @@ describe MML::Insurance do
   it 'public insurance item should assigned properly' do
     expect(insurance.publicInsurance[0].provider).to eq '15450034'
   end
+
+  context '#to_xml' do
+    subject {insurance.to_xml}
+
+    it {should match '<mmlHi:HealthInsuranceModule'}
+    it {should match 'mmlHi:countryType="JPN">'}
+    it {should match '<mmlHi:insuranceClass'}
+    it {should match 'mmlHi:ClassCode="01"'}
+    it {should match 'mmlHi:tableId="MML0031"'}
+    it {should match '国保</mmlHi:insuranceClass>'}
+    it {should match '<mmlHi:insuranceNumber>8001</mmlHi:insuranceNumber>'}
+    it {should match '<mmlHi:clientId>'}
+    it {should match '<mmlHi:group>宮市みへし</mmlHi:group>'}
+    it {should match '<mmlHi:number>421</mmlHi:number>'}
+    it {should match '</mmlHi:clientId>'}
+    it {should match '<mmlHi:familyClass>false</mmlHi:familyClass>'}
+    it {should match '<mmlHi:clientInfo>'}
+    it {should match '<mmlHi:personName>'}
+    it {should match '<mmlNm:Name mmlNm:repCode="A">'}
+    it {should match '<mmlNm:fullname>Shinji KOBAYASHI</mmlNm:fullname>'}
+    it {should match '</mmlNm:Name>'}
+    it {should match '</mmlHi:personName>'}
+    it {should match '<mmlHi:addresses>'}
+    it {should match '<mmlAd:Address'}
+    it {should match 'mmlAd:addressClass="business"'}
+    it {should match '<mmlAd:full>506, Dept. 9'}
+    it {should match '</mmlAd:Address>'}
+    it {should match '</mmlHi:addresses>'}
+    it {should match '<mmlHi:phones>'}
+    it {should match '<mmlPh:area>075</mmlPh:area>'}
+    it {should match '</mmlHi:phones>'}
+    it {should match '</mmlHi:clientInfo>'}
+    it {should match '<mmlHi:continuedDiseases>'}
+    it {should match '<mmlHi:disease>diabetes mellitus</mmlHi:disease>'}
+    it {should match '</mmlHi:continuedDiseases>'}
+    it {should match '<mmlHi:startDate>2013-10-01</mmlHi:startDate>'}
+    it {should match '<mmlHi:expiredDate>2018-03-31</mmlHi:expiredDate>'}
+    it {should match '<mmlHi:paymentInRatio>0.2</mmlHi:paymentInRatio>'}
+    it {should match '<mmlHi:paymentOutRatio>0.3</mmlHi:paymentOutRatio>'}
+    it {should match '<mmlHi:insuredInfo>'}
+    it {should match '<mmlHi:facility>'}
+    it {should match '<mmlFc:Facility>'}
+    it {should match '<mmlFc:name mmlFc:repCode="A">宮崎市広域連合</mmlFc:name>'}
+    it {should match '</mmlFc:Facility>'}
+    it {should match '</mmlHi:facility>'}
+    it {should match '<mmlHi:addresses>'}
+    it {should match '<mmlAd:prefecture>Miyazaki</mmlAd:prefecture>'}
+    it {should match '</mmlHi:addresses>'}
+    it {should match '<mmlHi:phones>'}
+    it {should match '<mmlPh:full>075-123-4567</mmlPh:full>'}
+    it {should match '</mmlHi:phones>'}
+    it {should match '</mmlHi:insuredInfo>'}
+    it {should match '</mmlHi:HealthInsuranceModule>'}
+  end
 end
