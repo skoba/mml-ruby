@@ -173,6 +173,21 @@ module MML
             end
           end if insuredInfo.phones
         end if insuredInfo
+        xml.mmlHi :workInfo do
+          xml.mmlHi :facility do
+            xml << workInfo.facility.to_xml
+          end if workInfo.facility
+          xml.mmlHi :addresses do
+            workInfo.addresses.each do |address|
+              xml << address.to_xml
+            end
+          end if workInfo.addresses
+          xml.mmlHi :phones do
+            workInfo.phones.each do |phone|
+              xml << phone.to_xml
+            end
+          end
+        end if workInfo
       end
     end
   end

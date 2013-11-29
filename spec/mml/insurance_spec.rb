@@ -160,6 +160,13 @@ describe MML::Insurance do
     it {should match '<mmlPh:full>075-123-4567</mmlPh:full>'}
     it {should match '</mmlHi:phones>'}
     it {should match '</mmlHi:insuredInfo>'}
+    it {should match '<mmlHi:workInfo><mmlHi:facility>'}
+    it {should match '<mmlFc:name mmlFc:repCode="A">Miyazaki Univ.</mmlFc:name>'}
+    it {should match '<mmlHi:addresses><mmlAd:Address'}
+    it {should match '<mmlAd:town>Kiyotake-cho</mmlAd:town>'}
+    it {should match '</mmlAd:Address></mmlHi:addresses'}
+    it {should match '<mmlHi:phones><mmlPh:Phone mmlPh:telEquipType="PH"><mmlPh:area>0985</mmlPh:area></mmlPh:Phone></mmlHi:phones>'}
+    it {should match '</mmlHi:workInfo>'}
     it {should match '</mmlHi:HealthInsuranceModule>'}
   end
 end
