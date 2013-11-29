@@ -188,6 +188,19 @@ module MML
             end
           end
         end if workInfo
+        xml.mmlHi :publicInsurance do
+          publicInsurance.each do |item|
+            attribute = {'mmlHi:priority' => item.priority} if item.priority
+            xml.mmlHi :publicInsuranceItem, attribute do
+              xml.mmlHi :providerName, item.providerName if item.providerName
+              xml.mmlHi :provider, item.provider
+              xml.mmlHi :recipient, item.recipient
+              xml.mmlHi :startDate, item.startDate
+              xml.mmlHi :expiredDate, item.expiredDate
+              xml.mmlHi :paymentRatio, item.paymentRatio, {'mmlHi:ratioType' => item.ratioType} if item.paymentRatio
+            end
+          end
+        end if publicInsurance
       end
     end
   end

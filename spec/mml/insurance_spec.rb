@@ -167,6 +167,16 @@ describe MML::Insurance do
     it {should match '</mmlAd:Address></mmlHi:addresses'}
     it {should match '<mmlHi:phones><mmlPh:Phone mmlPh:telEquipType="PH"><mmlPh:area>0985</mmlPh:area></mmlPh:Phone></mmlHi:phones>'}
     it {should match '</mmlHi:workInfo>'}
+    it {should match '<mmlHi:publicInsurance>'}
+    it {should match '<mmlHi:publicInsuranceItem mmlHi:priority="1">'}
+    it {should match '<mmlHi:providerName>公費</mmlHi:providerName>'}
+    it {should match '<mmlHi:provider>15450034</mmlHi:provider'}
+    it {should match '<mmlHi:recipient>0009043</mmlHi:recipient>'}
+    it {should match '<mmlHi:startDate>1997-09-30</mmlHi:startDate>'}
+    it {should match '<mmlHi:expiredDate>1999-09-30</mmlHi:expiredDate>'}
+    it {should match '<mmlHi:paymentRatio mmlHi:ratioType="fix">10000</mmlHi:paymentRatio>'}
+    it {should match '</mmlHi:publicInsuranceItem>'}
+    it {should match '</mmlHi:publicInsurance>'}
     it {should match '</mmlHi:HealthInsuranceModule>'}
   end
 end
