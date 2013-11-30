@@ -222,6 +222,10 @@ module MML
     optional_attribute :providerName, :paymentRatio, :ratioType
   end
 
+  class RegisteredDiagnosis
+    
+  end
+
   require_relative 'mml/common'
   require_relative 'mml/version'
 end
