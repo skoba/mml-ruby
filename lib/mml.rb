@@ -190,6 +190,7 @@ module MML
         end if workInfo
         xml.mmlHi :publicInsurance do
           publicInsurance.each do |item|
+            attribute = nil
             attribute = {'mmlHi:priority' => item.priority} if item.priority
             xml.mmlHi :publicInsuranceItem, attribute do
               xml.mmlHi :providerName, item.providerName if item.providerName
@@ -224,7 +225,36 @@ module MML
 
   class RegisteredDiagnosis < Base
     mandatory_attribute :diagnosis
-    optional_attribute :code, :system, :diagnosisContents
+    optional_attribute :code, :system, :diagnosisContents, :categories, :startDate, :endDate, :outcome, :firstEncounterDate, :relatedHealthInsurance
+
+    def to_xml
+      xml.mmlRd :RegisteredDiagnosisModule do
+        attributes = {'mmlRd:code' => code} if code
+        attributes['mmlRd:system'] = system if system
+        xml.mmlRd :diagnosis, attributes, diagnosis
+        xml.mmlRd :diagnosisContens do
+          diagnosisContents.each do |item|
+            attributes = nil
+            attributes = {'mmlRd:code' => item.code} if item.code
+            attributes['mmlRd:system'] = item.system if item.system
+            xml.mmlRd :dxItem, attributes do
+              xml.mmlRd :name, item.name
+            end
+          end
+        end if diagnosisContents
+        xml.mmlRd :categories do
+          categories.each do |category|
+            xml.mmlRd :category, {'mmlRd:tableId' => category.tableId}, category.value
+          end if categories
+        end
+        xml.mmlRd :startDate, startDate if startDate
+        xml.mmlRd :endDate, endDate if endDate
+        xml.mmlRd :outcome, outcome if outcome
+        xml.mmlRd :firstEncounterDate, firstEncounterDate if firstEncounterDate
+        attributes = 
+        xml.mmlRd :relatedHealthInsurance, {'mmlRd:uid' => relatedHealthInsurance} if relatedHealthInsurance
+      end
+    end
   end
 
   class DxItem < Base
@@ -232,7 +262,7 @@ module MML
     optional_attribute :code, :system
   end
 
-  class DiagnosisCategory < Base
+  class DiagnosticCategory < Base
     mandatory_attribute :value, :tableId
   end
 
