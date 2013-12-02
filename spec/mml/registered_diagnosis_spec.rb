@@ -1,5 +1,8 @@
 describe MML::RegisteredDiagnosis do
-  let(:registered_diagnosis) {MML::RegisteredDiagnosis.new(diagnosis: 'colon carcinoid', code: 'C189', system: 'ICD10', )}
+  let(:dx_item1) {MML::DxItem.new(name: 'cartinoid', code: 'C189', system: 'ICD10')}
+  let(:dx_item2) {MML::DxItem.new(name: 'colon')}
+
+  let(:registered_diagnosis) {MML::RegisteredDiagnosis.new(diagnosis: 'colon carcinoid', code: 'C189', system: 'ICD10', diagnosisContents: [dx_item1, dx_item2])}
 
   it 'is an instance of MML::RegisteredDiagnosis' do
     expect(registered_diagnosis).to be_an_instance_of MML::RegisteredDiagnosis
@@ -28,4 +31,16 @@ describe MML::RegisteredDiagnosis do
   it 'system is optional' do
     expect{registered_diagnosis.system = nil}.not_to raise_error
   end
+
+  context 'diangosisContents should be assigned properly' do
+    it 'the 1st DxItem name is cartinoid' do
+      expect(registered_diagnosis.diagnosisContents[0].name).to eq 'cartinoid'
+    end
+
+    it 'the 2nd DxItem name is colon' do
+      expect(registered_diagnosis.diagnosisContents[1].name).to eq 'colon'
+    end
+  end
+
+  it 'category'
 end

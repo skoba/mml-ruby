@@ -224,10 +224,16 @@ module MML
 
   class RegisteredDiagnosis < Base
     mandatory_attribute :diagnosis
+    optional_attribute :code, :system, :diagnosisContents
+  end
+
+  class DxItem < Base
+    mandatory_attribute :name
     optional_attribute :code, :system
   end
 
-  class DxItem
+  class DiagnosisCategory < Base
+    mandatory_attribute :value, :tableId
   end
 
   require_relative 'mml/common'
