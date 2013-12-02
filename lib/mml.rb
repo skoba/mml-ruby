@@ -222,8 +222,12 @@ module MML
     optional_attribute :providerName, :paymentRatio, :ratioType
   end
 
-  class RegisteredDiagnosis
-    
+  class RegisteredDiagnosis < Base
+    mandatory_attribute :diagnosis
+    optional_attribute :code, :system
+  end
+
+  class DxItem
   end
 
   require_relative 'mml/common'
