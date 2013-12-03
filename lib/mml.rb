@@ -269,6 +269,15 @@ module MML
   class Lifestyle < Base
     mandatory_attribute :occupation, :tobacco, :alcohol
     optional_attribute :other
+
+    def to_xml
+      xml.mmlLs :LifestyleModule do
+        xml.mmlLs :occupation, occupation
+        xml.mmlLs :tobacco, tobacco
+        xml.mmlLs :alcohol, alcohol
+        xml.mmlLs :other, other if other
+      end
+    end
   end
   require_relative 'mml/common'
   require_relative 'mml/version'

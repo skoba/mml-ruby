@@ -36,4 +36,15 @@ describe MML::Lifestyle do
   it 'other is optional' do
     expect{lifestyle.other=nil}.not_to raise_error
   end
+
+  describe '#to_xml' do
+    subject {lifestyle.to_xml}
+
+    it {should match "<mmlLs:LifestyleModule>"}
+    it {should match '<mmlLs:occupation>physician</mmlLs:occupation>'}
+    it {should match '<mmlLs:tobacco>never</mmlLs:tobacco>'}
+    it {should match '<mmlLs:alcohol>social</mmlLs:alcohol>'}
+    it {should match '<mmlLs:other>no constipation</mmlLs:other>'}
+    it {should match "</mmlLs:LifestyleModule>"}
+  end
 end
