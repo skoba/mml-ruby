@@ -279,6 +279,15 @@ module MML
       end
     end
   end
+
+  class BaseClinic
+  end
+
+  class AllergyItem < Base
+    mandatory_attribute :factor
+    optional_attribute :severity, :identifiedDate, :memo
+  end
+
   require_relative 'mml/common'
   require_relative 'mml/version'
 end
