@@ -266,6 +266,10 @@ module MML
     mandatory_attribute :value, :tableId
   end
 
+  class Lifestyle < Base
+    mandatory_attribute :occupation, :tobacco, :alcohol
+    optional_attribute :other
+  end
   require_relative 'mml/common'
   require_relative 'mml/version'
 end
