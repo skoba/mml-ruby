@@ -290,7 +290,7 @@ module MML
 
   class BloodType < Base
     mandatory_attribute :abo
-    optional_attribute :rh
+    optional_attribute :rh, :others
   end
 
   class OtherBloodType < Base
