@@ -288,6 +288,16 @@ module MML
     optional_attribute :severity, :identifiedDate, :memo
   end
 
+  class BloodType < Base
+    mandatory_attribute :abo
+    optional_attribute :rh
+  end
+
+  class OtherBloodType < Base
+    mandatory_attribute :typeName, :typeJudgement
+    optional_attribute :description
+  end
+
   require_relative 'mml/common'
   require_relative 'mml/version'
 end
