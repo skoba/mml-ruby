@@ -1,6 +1,6 @@
 describe MML::BloodType do
   let(:other_blood_type) {MML::OtherBloodType.new(typeName: 'MNS blood type', typeJudgement: 'MN')}
-  let(:blood_type) {MML::BloodType.new(abo: 'a', rh: 'rhD+', others: [other_blood_type])}
+  let(:blood_type) {MML::BloodType.new(abo: 'a', rh: 'rhD+', others: [other_blood_type], memo: 'after BMT')}
 
   it 'is an instance of MML::BloodType' do
     expect(blood_type).to be_an_instance_of MML::BloodType
@@ -24,5 +24,17 @@ describe MML::BloodType do
 
   it 'others should be assigned properly' do
     expect(blood_type.others[0].typeJudgement).to eq 'MN'
+  end
+
+  it 'others is optional' do
+    expect {blood_type.others = nil}.not_to raise_error
+  end
+  
+  it 'memo should be assigned properly' do
+    expect(blood_type.memo).to eq 'after BMT'
+  end
+
+  it 'memo is optional' do
+    expect{blood_type.memo = nil}.not_to raise_error
   end
 end

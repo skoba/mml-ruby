@@ -290,12 +290,17 @@ module MML
 
   class BloodType < Base
     mandatory_attribute :abo
-    optional_attribute :rh, :others
+    optional_attribute :rh, :others, :memo
   end
 
   class OtherBloodType < Base
     mandatory_attribute :typeName, :typeJudgement
     optional_attribute :description
+  end
+
+  class InfectionItem < Base
+    mandatory_attribute :factor, :examValue
+    optional_attribute :identifiedDate
   end
 
   require_relative 'mml/common'
