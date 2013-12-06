@@ -343,6 +343,22 @@ module MML
     optional_attribute :identifiedDate, :memo
   end
 
+  class FirstClinic < Base
+    optional_attribute :familyHistory, :birthInfo
+  end
+
+  class FamilyHistoryItem < Base
+    mandatory_attribute :relation, :registeredDiagnosis
+    optional_attribute :age, :memo
+  end
+
+  class BirthInfo < Base
+    optional_attribute :facility, :deliveryWeeks, :deliveryMethod, :bodyWeight, :bodyWeightUnit, :bodyHeight, :bodyHeightUnit, :chestCircumference, :chestCircumferenceUnit, :headCircumference, :headCircumferenceUnit, :memo
+  end
+
+  class VaccinationItem < Base
+  end
+
   require_relative 'mml/common'
   require_relative 'mml/version'
 end
