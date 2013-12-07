@@ -357,6 +357,8 @@ module MML
   end
 
   class VaccinationItem < Base
+    mandatory_attribute :vaccine, :injected
+    optional_attribute :age, :memo
   end
 
   require_relative 'mml/common'
