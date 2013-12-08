@@ -361,6 +361,11 @@ module MML
     optional_attribute :age, :memo
   end
 
+  class PastHistoryItem < Base
+    mandatory_attribute :timeExpression
+    optional_attribute :eventExpression
+  end
+
   require_relative 'mml/common'
   require_relative 'mml/version'
 end
