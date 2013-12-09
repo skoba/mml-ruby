@@ -361,6 +361,10 @@ module MML
     optional_attribute :age, :memo
   end
 
+  class PastHistory < Base
+    optional_attribute :freeNote
+  end
+
   class PastHistoryItem < Base
     mandatory_attribute :timeExpression
     optional_attribute :eventExpression

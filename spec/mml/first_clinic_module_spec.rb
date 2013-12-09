@@ -5,6 +5,7 @@ describe MML::FirstClinic do
   let(:name) { MML::FacilityName.new(value: 'New Millenium Medical College Hospital', repCode: 'A', tableId: 'MML0025') }
   let(:facility) { MML::Facility.new(name: [name], id: id) }
   let(:birth_info) {MML::BirthInfo.new(facility: facility, deliveryWeeks: 'P38W', deliveryMethod: 'cesarean section', bodyWeight: 3370, bodyWeightUnit: 'g', bodyHeight: 50, bodyHeightUnit: 'cm', chestCircumference: 31.1, chestCircumferenceUnit: 'cm', headCircumference: 32.8, headCircumferenceUnit: 'cm', memo: 'intact')}
+  let(:past_history_item) {MML::PastHistoryItem.new(timeExpression: '6 years old', eventExpression: ['appendectomy'])}
   let(:first_clinic) {MML::FirstClinic.new(familyHistory: [family_history_item], birthInfo: birth_info)}
 
   it 'is an instance of MML::FirstClinc' do
