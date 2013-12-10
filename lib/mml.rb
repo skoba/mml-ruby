@@ -421,6 +421,20 @@ module MML
     optional_attribute :eventExpression
   end
 
+  class ProgressCourse < Base
+    optional_attribute :freeExpression, :extRef
+    
+  end
+
+  class ProblemItem < Base
+    optional_attribute :problem
+  end
+
+  class ValueWithLink < Base
+    mandatory_attribute :value
+    optional_attribute :link
+  end
+
   require_relative 'mml/common'
   require_relative 'mml/version'
 end
