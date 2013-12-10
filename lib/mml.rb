@@ -422,8 +422,43 @@ module MML
   end
 
   class ProgressCourse < Base
-    optional_attribute :freeExpression, :extRef
-    
+    optional_attribute :freeExpression, :extRef, :structuredExpression
+
+    def to_xml
+      xml.mmlPc :ProgressCourseModule do
+        xml.mmlPc :FreeExpression do
+          xml << freeExpression
+          extRef.each do |ref|
+            xml << ref.to_xml
+          end if extRef
+        end if freeExpression
+        xml.mmlPc :structuredExpression do
+          structuredExpression.each do |item|
+            xml.mmlPc :problemItem do
+              attributes = {'mmlPc:dxUid' => item.dxUid} if item.dxUid
+              xml.mmlPc :problem, item.problem, attributes
+              xml.mmlPc :subjective do
+                xml.mmlPc :freeNotes, item.subjective.freeNotes if item.subjective.freeNotes
+                xml.mmlPc :subjectiveItem do
+                  item.subjective.subjectiveItem.each do |sitem|
+                    xml.mmlPc :timeExpression, sitem.timeExpression
+                    sitem.eventExpression.each do |event|
+                      xml.mmlPc :eventExpression, event
+                    end if sitem.eventExpression
+                  end
+                end if item.subjective.subjectiveItem
+              end if item.subjective
+              xml.mmlPc :objective do
+                xml.mmlPc :objectiveNotes, item.objective.objectiveNotes if item.objective.objectiveNotes
+                xml.mmlPc :physicalExam do
+                  
+                end if item.objective.physicalExam
+              end if item.objective
+            end
+          end
+        end if structuredExpression
+      end
+    end
   end
 
   class ProblemItem < Base

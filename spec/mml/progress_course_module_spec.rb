@@ -20,7 +20,7 @@ describe MML::ProgressCourse do
   let(:plan) {MML::Plan.new(testOrder: test_order, rxOrder: rx_order, txOrder: tx_order, planNotes: 'Antibiotics administration')}
   let(:problem_item) {MML::ProblemItem.new(problem: 'headache', dxUid: '0012-3330-abdc', subjective: subjective, objective: objective, assessment: [assessmentItem], plan: plan)}
   let(:extref) {MML::ExtRef.new(href: 'ehr://1023.4355.922/head/value')}
-  let(:progress_course) {MML::ProgressCourse.new(freeExpression: '12/10 consciousness clear', extRef: [extref])}
+  let(:progress_course) {MML::ProgressCourse.new(freeExpression: '12/10 consciousness clear', extRef: [extref], structuredExpression: [problem_item])}
 
   it 'is an instance of MML::ProgressCourse' do
     expect(progress_course).to be_an_instance_of MML::ProgressCourse
@@ -33,5 +33,29 @@ describe MML::ProgressCourse do
   it 'extref should be assigned properly' do
     expect(progress_course.extRef[0].href).to eq 'ehr://1023.4355.922/head/value'
   end
-  
+
+  it 'problem_item should be assigned to stracturedExpression' do
+    expect(progress_course.structuredExpression[0].problem).to eq 'headache'
+  end
+
+  describe '#to_xml' do
+    subject {progress_course.to_xml}
+
+    it {should match '<mmlPc:ProgressCourseModule>'}
+    it {should match '<mmlPc:FreeExpression>12/10 consciousness clear<mmlCm:extRef mmlCm:href="ehr://1023.4355.922/head/value"/></mmlPc:FreeExpression>'}
+    it {should match '<mmlPc:structuredExpression>'}
+    it {should match '<mmlPc:problemItem>'}
+    it {should match '<mmlPc:problem mmlPc:dxUid="0012-3330-abdc">headache</mmlPc:problem>'}
+    it {should match '<mmlPc:subjective><mmlPc:freeNotes>headache from 5 years ago</mmlPc:freeNotes>'}
+    it {should match '<mmlPc:subjectiveItem><mmlPc:timeExpression>5 years ago</mmlPc:timeExpression>'}
+    it {should match '<mmlPc:eventExpression>headache</mmlPc:eventExpression></mmlPc:subjectiveItem></mmlPc:subjective>'}
+    it {should match '<mmlPc:objective>'}
+    it {should match '<mmlPc:objectiveNotes>looks pale</mmlPc:objectiveNotes>'}
+    it {should match '<mmlPc:physicalExam>'}
+    it {should match '</mmlPc:physicalExam>'}
+    it {should match '</mmlPc:objective>'}
+    it {should match '</mmlPc:problemItem>'}
+    it {should match '</mmlPc:structuredExpression>'}
+    it {should match '</mmlPc:ProgressCourseModule>'}
+  end
 end
