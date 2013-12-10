@@ -1,9 +1,9 @@
-describe MML::PhysicalItem do
+describe MML::PhysicalExamItem do
   let(:extref) {MML::ExtRef.new(href: 'snd://localhost/chest.wav')}
-  let(:physical_item) {MML::PhysicalItem.new(title: 'Chest auscultation', result: 'Respiratory sounds vesicular', interpretation: 'no rale', referenceInfo: [extref])}
+  let(:physical_item) {MML::PhysicalExamItem.new(title: 'Chest auscultation', result: 'Respiratory sounds vesicular', interpretation: 'no rale', referenceInfo: [extref])}
 
   it 'is an instance of MML::PhysicalItem' do
-    expect(physical_item).to be_an_instance_of MML::PhysicalItem
+    expect(physical_item).to be_an_instance_of MML::PhysicalExamItem
   end
 
   it 'title should be assigned properly' do

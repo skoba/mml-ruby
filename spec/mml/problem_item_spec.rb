@@ -1,5 +1,6 @@
 describe MML::ProblemItem do
-  let(:problem_item) {MML::ProblemItem.new(problem: 'headache', dxUid: '0012-3330-abdc')}
+  let(:assessmentItem) {'Acute bronchitis'}
+  let(:problem_item) {MML::ProblemItem.new(problem: 'headache', dxUid: '0012-3330-abdc', assessment: [assessmentItem])}
 
   it 'problem item is an instance of MML::ProblemItem' do
     expect(problem_item).to be_an_instance_of MML::ProblemItem
@@ -11,5 +12,9 @@ describe MML::ProblemItem do
 
   it 'dxUid should be assigned properly' do
     expect(problem_item.dxUid).to eq '0012-3330-abdc'
+  end
+
+  it 'assessment should be assigned properly' do
+    expect(problem_item.assessment[0]).to eq 'Acute bronchitis'
   end
 end
