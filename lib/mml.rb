@@ -427,7 +427,7 @@ module MML
   end
 
   class ProblemItem < Base
-    optional_attribute :problem, :dxUid, :assessment
+    optional_attribute :problem, :dxUid, :subjective, :objective, :assessment, :plan
   end
 
   class ValueWithLink < Base
@@ -450,6 +450,10 @@ module MML
   class PhysicalExamItem < Base
     mandatory_attribute :title, :result
     optional_attribute :interpretation, :referenceInfo
+  end
+
+  class Plan < Base
+    optional_attribute :testOrder, :rxOrder, :txOrder, :planNotes
   end
 
   require_relative 'mml/common'
