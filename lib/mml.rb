@@ -427,12 +427,29 @@ module MML
   end
 
   class ProblemItem < Base
-    optional_attribute :problem
+    optional_attribute :problem, :dxUid
   end
 
   class ValueWithLink < Base
     mandatory_attribute :value
     optional_attribute :link
+  end
+
+  class SubjectiveItem < Base
+    mandatory_attribute :timeExpression, :eventExpression
+  end
+
+  class Subjective < Base
+    optional_attribute :freeNotes, :subjectiveItem
+  end
+
+  class Objective < Base
+    optional_attribute :objectiveNotes
+  end
+
+  class PhysicalItem < Base
+    mandatory_attribute :title, :result
+    optional_attribute :interpretation, :referenceInfo
   end
 
   require_relative 'mml/common'
