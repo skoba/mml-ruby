@@ -52,8 +52,26 @@ describe MML::ProgressCourse do
     it {should match '<mmlPc:objective>'}
     it {should match '<mmlPc:objectiveNotes>looks pale</mmlPc:objectiveNotes>'}
     it {should match '<mmlPc:physicalExam>'}
+    it {should match '<mmlPc:physicalExamItem>'}
+    it {should match '<mmlPc:title>Chest auscultation</mmlPc:title>'}
+    it {should match '<mmlPc:result>Respiratory sounds vesicular</mmlPc:result>'}
+    it {should match '<mmlPc:referenceInfo><mmlCm:extRef mmlCm:href="snd://localhost/chest.wav"/></mmlPc:referenceInfo>'}
+    it {should match '<mmlPc:interpretation>no rale</mmlPc:interpretation>'}
+    it {should match '</mmlPc:physicalExamItem>'}
     it {should match '</mmlPc:physicalExam>'}
+    it {should match '<mmlPc:testResult>WBC 9000/microl<mmlCm:extRef mmlCm:href="http://record.net/result"/></mmlPc:testResult>'}
+    it {should match '<mmlPc:rxRecord>Ampcilin 1200mg/day<mmlCm:extRef mmlCm:href="http://druginfo/recipie"/></mmlPc:rxRecord>'}
+    it {should match '<mmlPc:txRecord>antibiotics, p.o.<mmlCm:extRef mmlCm:href="http://treatment/fig1"/></mmlPc:txRecord>'}
     it {should match '</mmlPc:objective>'}
+    it {should match '<mmlPc:assessment>'}
+    it {should match '<mmlPc:assessmentItem>Acute bronchitis</mmlPc:assessmentItem>'}
+    it {should match '</mmlPc:assessment>'}
+    it {should match '<mmlPc:plan>'}
+    it {should match '<mmlPc:testOrder>Full Blood Count<mmlCm:extRef mmlCm:href="http://testserer/laborder"/></mmlPc:testOrder>'}
+    it {should match '<mmlPc:rxOrder>Rp1. Ampicilin 3.0g div<mmlCm:extRef mmlCm:href="http://rxorder/injection"/></mmlPc:rxOrder>'}
+    it {should match '<mmlPc:txOrder>cooling<mmlCm:extRef mmlCm:href="http://txorder/care"/></mmlPc:txOrder>'}
+    it {should match '<mmlPc:planNotes>Antibiotics administration</mmlPc:planNotes>'}
+    it {should match '</mmlPc:plan>'}
     it {should match '</mmlPc:problemItem>'}
     it {should match '</mmlPc:structuredExpression>'}
     it {should match '</mmlPc:ProgressCourseModule>'}
