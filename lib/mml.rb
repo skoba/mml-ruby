@@ -65,10 +65,12 @@ module MML
         xml.mmlPi :birthday, birthday
         xml.mmlPi :sex, sex
         if nationality
+          attributes = nil
           attributes = {'mmlPi:subtype' => nationality.subtype} if nationality.subtype
           xml.mmlPi :nationality, nationality.value, attributes
         end
         if race
+          attributes = nil
           attributes = {'mmlPi:raceCode' => race.raceCode} if race.raceCode
           attributes['mmlPi:raceCodeId'] = race.raceCodeId if race.raceCodeId
           xml.mmlPi :race, race.value, attributes
@@ -91,6 +93,7 @@ module MML
         end if phones
         xml.mmlPi :accountNumber, accountNumber if accountNumber
         xml.mmlPi :socialIdentification, socialIdentification if socialIdentification
+        death_attr = nil
         death_attr = {'mmlPi:date' => death.date} if death.date
         xml.mmlPi :death, death.flag.to_s, death_attr unless death.nil?
       end
@@ -229,6 +232,7 @@ module MML
 
     def to_xml
       xml.mmlRd :RegisteredDiagnosisModule do
+        attributes = nil
         attributes = {'mmlRd:code' => code} if code
         attributes['mmlRd:system'] = system if system
         xml.mmlRd :diagnosis, attributes, diagnosis
@@ -435,6 +439,7 @@ module MML
         xml.mmlPc :structuredExpression do
           structuredExpression.each do |item|
             xml.mmlPc :problemItem do
+              attributes = nil
               attributes = {'mmlPc:dxUid' => item.dxUid} if item.dxUid
               xml.mmlPc :problem, item.problem, attributes
               xml.mmlPc :subjective do
@@ -544,6 +549,19 @@ module MML
 
   class Plan < Base
     optional_attribute :testOrder, :rxOrder, :txOrder, :planNotes
+  end
+
+  class Surgery < Base
+  end
+
+  class SurgicalItem < Base
+    mandatory_attribute :date, :surgicalDiagnosis
+    optional_attribute :type, :startTime, :duration, :surgicalDepartment, :patientDepartment
+  end
+
+  class ProcedureItem < Base
+    mandatory_attribute :operation
+    optional_attribute :code, :system
   end
 
   require_relative 'mml/common'
