@@ -555,12 +555,16 @@ module MML
   end
 
   class SurgicalItem < Base
-    mandatory_attribute :date, :surgicalDiagnosis
+    mandatory_attribute :date, :surgicalDiagnosis, :surgicalProcedure
     optional_attribute :type, :startTime, :duration, :surgicalDepartment, :patientDepartment
   end
 
   class ProcedureItem < Base
-    mandatory_attribute :operation
+    optional_attribute :operation, :code, :system, :operationElement, :procedureMemo
+  end
+
+  class OperationElementItem < Base
+    mandatory_attribute :title
     optional_attribute :code, :system
   end
 

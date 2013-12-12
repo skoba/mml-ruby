@@ -4,7 +4,9 @@ describe MML::SurgicalItem do
   let(:patient_department_name) {MML::DepartmentName.new(repCode: 'A', tableId: 'MML0025', value: 'Internal medicine')}
   let(:patient_department) {MML::Department.new(name: [patient_department_name])}
   let(:registered_diagnosis) {MML::RegisteredDiagnosis.new(diagnosis: 'Lung cancer')}
-  let(:surgical_item) {MML::SurgicalItem.new(type: 'elective', date: '2013-12-10', startTime: '08:30', duration: 'PT5H25M', surgicalDepartment: surgical_department, patientDepartment: patient_department, surgicalDiagnosis: [registered_diagnosis])}
+  let(:operation_element_item) {MML::OperationElementItem.new(title: 'coronary artery bipass grafting', code: 'K552', system: 'MHLW')}
+  let(:procedure_item) {MML::ProcedureItem.new(operation: 'right lobectomy', code: 'K511', system: 'MHLW', operationElement: [operation_element_item], procedureMemo: 'off pump')}
+  let(:surgical_item) {MML::SurgicalItem.new(type: 'elective', date: '2013-12-10', startTime: '08:30', duration: 'PT5H25M', surgicalDepartment: surgical_department, patientDepartment: patient_department, surgicalDiagnosis: [registered_diagnosis], surgicalProcedure: [procedure_item])}
 
   it 'is an instance of MML::SurgicalItem' do
     expect(surgical_item).to be_an_instance_of MML::SurgicalItem
@@ -66,5 +68,7 @@ describe MML::SurgicalItem do
     expect {surgical_item.surgicalDiagnosis = nil}.to raise_error ArgumentError
   end
 
-  it 'surgicalProcedure is'
+  it 'surgicalProcedure is properly assigned' do
+    expect(surgical_item.surgicalProcedure[0].operation).to eq 'right lobectomy'
+  end
 end
