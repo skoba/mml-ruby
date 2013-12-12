@@ -568,6 +568,10 @@ module MML
     optional_attribute :code, :system
   end
 
+  class SurgicalStaff < Base
+    optional_attribute :staffClass, :superiority, :staffInfo
+  end
+
   require_relative 'mml/common'
   require_relative 'mml/version'
 end
