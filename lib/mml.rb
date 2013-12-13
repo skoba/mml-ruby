@@ -569,7 +569,8 @@ module MML
   end
 
   class SurgicalStaff < Base
-    optional_attribute :staffClass, :superiority, :staffInfo
+    mandatory_attribute :staffInfo
+    optional_attribute :staffClass, :superiority
   end
 
   require_relative 'mml/common'
