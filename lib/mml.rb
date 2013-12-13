@@ -573,6 +573,10 @@ module MML
     optional_attribute :staffClass, :superiority
   end
 
+  class AnesthesiaProcedure < OperationElementItem
+
+  end
+
   require_relative 'mml/common'
   require_relative 'mml/version'
 end
