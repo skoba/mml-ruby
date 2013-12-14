@@ -577,6 +577,10 @@ module MML
 
   end
 
+  class Anesthesiologist < SurgicalStaff
+    
+  end
+
   require_relative 'mml/common'
   require_relative 'mml/version'
 end
