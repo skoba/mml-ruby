@@ -6,6 +6,15 @@ describe MML::SurgicalItem do
   let(:registered_diagnosis) {MML::RegisteredDiagnosis.new(diagnosis: 'Lung cancer')}
   let(:operation_element_item) {MML::OperationElementItem.new(title: 'coronary artery bipass grafting', code: 'K552', system: 'MHLW')}
   let(:procedure_item) {MML::ProcedureItem.new(operation: 'right lobectomy', code: 'K511', system: 'MHLW', operationElement: [operation_element_item], procedureMemo: 'off pump')}
+  let(:staff_id) {MML::Id.new(type: 'facility', tableId: 'MML0024', value: '00123')}
+  let(:staff_name) {MML::Name.new(repCode: 'A', fullname: 'Hiroyuki Yoshihara')}
+  let(:staff_info) {MML::PersonalizedInfo.new(id: staff_id, personName: [staff_name])}
+  let(:staff) {MML::SurgicalStaff.new(staffClass: 'assistant', superiority: 1, staffInfo: staff_info)}
+  let(:anesthesia_procedure){MML::AnesthesiaProcedure.new(title: 'general anesthesia', code: 'L002', system: 'MHLW')}
+  let(:anesthesiologist_id) {MML::Id.new(type: 'facility', tableId: 'MML0024', value: '00123')}
+  let(:anesthesiologist_name) {MML::Name.new(repCode: 'A', fullname: 'Kenji ARAKI')}
+  let(:anesthesiologist_info) {MML::PersonalizedInfo.new(id: staff_id, personName: [staff_name])}
+  let(:anesthesiologist) {MML::Anesthesiologist.new(staffClass: 'main anesthesiologist', superiority: 1, staffInfo: anesthesiologist_info)}
   let(:surgical_item) {MML::SurgicalItem.new(type: 'elective', date: '2013-12-10', startTime: '08:30', duration: 'PT5H25M', surgicalDepartment: surgical_department, patientDepartment: patient_department, surgicalDiagnosis: [registered_diagnosis], surgicalProcedure: [procedure_item])}
 
   it 'is an instance of MML::SurgicalItem' do
