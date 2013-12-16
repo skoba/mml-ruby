@@ -13,9 +13,10 @@ describe MML::SurgicalItem do
   let(:anesthesia_procedure){MML::AnesthesiaProcedure.new(title: 'general anesthesia', code: 'L002', system: 'MHLW')}
   let(:anesthesiologist_id) {MML::Id.new(type: 'facility', tableId: 'MML0024', value: '00123')}
   let(:anesthesiologist_name) {MML::Name.new(repCode: 'A', fullname: 'Kenji ARAKI')}
-  let(:anesthesiologist_info) {MML::PersonalizedInfo.new(id: staff_id, personName: [staff_name])}
+  let(:anesthesiologist_info) {MML::PersonalizedInfo.new(id: staff_id, personName: [anesthesiologist_name])}
   let(:anesthesiologist) {MML::Anesthesiologist.new(staffClass: 'main anesthesiologist', superiority: 1, staffInfo: anesthesiologist_info)}
-  let(:surgical_item) {MML::SurgicalItem.new(type: 'elective', date: '2013-12-10', startTime: '08:30', duration: 'PT5H25M', surgicalDepartment: surgical_department, patientDepartment: patient_department, surgicalDiagnosis: [registered_diagnosis], surgicalProcedure: [procedure_item])}
+  let(:ext_ref) {MML::ExtRef.new(contentType: 'image/gif', medicalRole: 'surgicalFigure', title: 'skin incision', href: 'patient001/surgicalFigure001.gif')}
+  let(:surgical_item) {MML::SurgicalItem.new(type: 'elective', date: '2013-12-10', startTime: '08:30', duration: 'PT5H25M', surgicalDepartment: surgical_department, patientDepartment: patient_department, surgicalDiagnosis: [registered_diagnosis], surgicalProcedure: [procedure_item], anesthesiaProcedure: [anesthesia_procedure], anesthesiologists: [anesthesiologist], anesthesiaDuration: 'PT6H25M', operativeNotes: 'Total bleeding: 380ml', referenceInfo: [ext_ref], memo: 'This operation was well performed.')}
 
   it 'is an instance of MML::SurgicalItem' do
     expect(surgical_item).to be_an_instance_of MML::SurgicalItem
@@ -79,5 +80,37 @@ describe MML::SurgicalItem do
 
   it 'surgicalProcedure is properly assigned' do
     expect(surgical_item.surgicalProcedure[0].operation).to eq 'right lobectomy'
+  end
+
+  it 'anesthesiaProcedure should be assigned properly' do
+    expect(surgical_item.anesthesiaProcedure[0].title).to eq 'general anesthesia'
+  end
+
+  it 'anesthesiologists should be assigned properly' do
+    expect(surgical_item.anesthesiologists[0].staffInfo.personName[0].fullname).to eq 'Kenji ARAKI'
+  end
+
+  it 'anesthesiologists is optional' do
+    expect {surgical_item.anesthesiologists = nil}.not_to raise_error
+  end
+
+  it 'anesthesiaDuration should be assigned properly' do
+    expect(surgical_item.anesthesiaDuration).to eq 'PT6H25M'
+  end
+
+  it 'anesthesiaDuration is optional' do
+    expect {surgical_item.anesthesiaDuration}.not_to raise_error
+  end
+
+  it 'operativeNotes should be assigned properly' do
+    expect(surgical_item.operativeNotes).to eq 'Total bleeding: 380ml'
+  end
+
+  it 'referenceInfo should be assigned properly' do
+    expect(surgical_item.referenceInfo[0].title).to eq 'skin incision'
+  end
+
+  it 'memo should be assigned properly' do
+    expect(surgical_item.memo).to eq 'This operation was well performed.'
   end
 end

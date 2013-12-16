@@ -556,7 +556,7 @@ module MML
 
   class SurgicalItem < Base
     mandatory_attribute :date, :surgicalDiagnosis, :surgicalProcedure
-    optional_attribute :type, :startTime, :duration, :surgicalDepartment, :patientDepartment
+    optional_attribute :type, :startTime, :duration, :surgicalDepartment, :patientDepartment, :anesthesiaProcedure, :anesthesiologists, :anesthesiaDuration, :operativeNotes, :referenceInfo, :memo
   end
 
   class ProcedureItem < Base
