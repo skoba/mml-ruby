@@ -249,8 +249,8 @@ module MML
         xml.mmlRd :categories do
           categories.each do |category|
             xml.mmlRd :category, {'mmlRd:tableId' => category.tableId}, category.value
-          end if categories
-        end
+          end
+        end if categories
         xml.mmlRd :startDate, startDate if startDate
         xml.mmlRd :endDate, endDate if endDate
         xml.mmlRd :outcome, outcome if outcome
@@ -552,9 +552,58 @@ module MML
   end
 
   class Surgery < Base
+    mandatory_attribute :surgeryItem
+
+    def to_xml
+      xml.mmlSg :SurgeryModule do
+        surgeryItem.each do |sitem|
+          xml.mmlSg :surgeryItem do
+            attribute = nil
+            attribute = {'mmlSg:type' => sitem.type} if sitem.type
+            xml.mmlSg :surgicalInfo, attribute do
+              xml.mmlSg :date, sitem.date
+              xml.mmlSg :startTime, sitem.startTime if sitem.startTime
+              xml.mmlSg :duration, sitem.duration if sitem.duration
+              xml.mmlSg :surgicalDepartment do
+                xml << sitem.surgicalDepartment.to_xml
+              end if sitem.surgicalDepartment
+              xml.mmlSg :patientDepartment do
+                xml << sitem.patientDepartment.to_xml
+              end if sitem.patientDepartment
+            end
+            xml.mmlSg :surgicalDiagnosis do
+              sitem.surgicalDiagnosis.each do |ditem|
+                xml << ditem.to_xml
+              end
+            end
+            xml.mmlSg :surgicalProcedure do
+              sitem.surgicalProcedure.each do |pitem|
+                xml.mmlSg :procedureItem do
+                  attributes = nil
+                  attributes = {'mmlSg:code' => pitem.code} if pitem.code
+                  attributes['mmlSg:system'] = pitem.system if pitem.system
+                  xml.mmlSg :operation, pitem.operation, attributes if pitem.operation
+                  xml.mmlSg :operationElement do
+                    pitem.operationElement.each do |oitem|
+                      xml.mmlSg :operationElementItem do
+                        attributes = nil
+                        attributes = {'mmlSg:code' => oitem.code}
+                        attributes['mmlSg:system'] = oitem.system
+                        xml.mmlSg :title, oitem.title, attributes
+                      end
+                    end
+                  end if pitem.operationElement
+                  xml.mmlSg :procedureMemo, pitem.procedureMemo if pitem.procedureMemo
+                end
+              end
+            end
+          end
+        end
+      end
+    end
   end
 
-  class SurgicalItem < Base
+  class SurgeryItem < Base
     mandatory_attribute :date, :surgicalDiagnosis, :surgicalProcedure
     optional_attribute :type, :startTime, :duration, :surgicalDepartment, :patientDepartment, :anesthesiaProcedure, :anesthesiologists, :anesthesiaDuration, :operativeNotes, :referenceInfo, :memo
   end
