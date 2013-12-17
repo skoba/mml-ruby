@@ -65,12 +65,12 @@ module MML
         xml.mmlPi :birthday, birthday
         xml.mmlPi :sex, sex
         if nationality
-          attributes = nil
+          attributes = Hash.new
           attributes = {'mmlPi:subtype' => nationality.subtype} if nationality.subtype
           xml.mmlPi :nationality, nationality.value, attributes
         end
         if race
-          attributes = nil
+          attributes = Hash.new
           attributes = {'mmlPi:raceCode' => race.raceCode} if race.raceCode
           attributes['mmlPi:raceCodeId'] = race.raceCodeId if race.raceCodeId
           xml.mmlPi :race, race.value, attributes
@@ -93,7 +93,7 @@ module MML
         end if phones
         xml.mmlPi :accountNumber, accountNumber if accountNumber
         xml.mmlPi :socialIdentification, socialIdentification if socialIdentification
-        death_attr = nil
+        death_attr = Hash.new
         death_attr = {'mmlPi:date' => death.date} if death.date
         xml.mmlPi :death, death.flag.to_s, death_attr unless death.nil?
       end
@@ -193,7 +193,7 @@ module MML
         end if workInfo
         xml.mmlHi :publicInsurance do
           publicInsurance.each do |item|
-            attribute = nil
+            attribute = Hash.new
             attribute = {'mmlHi:priority' => item.priority} if item.priority
             xml.mmlHi :publicInsuranceItem, attribute do
               xml.mmlHi :providerName, item.providerName if item.providerName
@@ -232,13 +232,13 @@ module MML
 
     def to_xml
       xml.mmlRd :RegisteredDiagnosisModule do
-        attributes = nil
+        attributes = Hash.new
         attributes = {'mmlRd:code' => code} if code
         attributes['mmlRd:system'] = system if system
         xml.mmlRd :diagnosis, attributes, diagnosis
         xml.mmlRd :diagnosisContens do
           diagnosisContents.each do |item|
-            attributes = nil
+            attributes = Hash.new
             attributes = {'mmlRd:code' => item.code} if item.code
             attributes['mmlRd:system'] = item.system if item.system
             xml.mmlRd :dxItem, attributes do
@@ -439,7 +439,7 @@ module MML
         xml.mmlPc :structuredExpression do
           structuredExpression.each do |item|
             xml.mmlPc :problemItem do
-              attributes = nil
+              attributes = Hash.new
               attributes = {'mmlPc:dxUid' => item.dxUid} if item.dxUid
               xml.mmlPc :problem, item.problem, attributes
               xml.mmlPc :subjective do
@@ -558,7 +558,7 @@ module MML
       xml.mmlSg :SurgeryModule do
         surgeryItem.each do |sitem|
           xml.mmlSg :surgeryItem do
-            attribute = nil
+            attribute = Hash.new
             attribute = {'mmlSg:type' => sitem.type} if sitem.type
             xml.mmlSg :surgicalInfo, attribute do
               xml.mmlSg :date, sitem.date
@@ -579,14 +579,14 @@ module MML
             xml.mmlSg :surgicalProcedure do
               sitem.surgicalProcedure.each do |pitem|
                 xml.mmlSg :procedureItem do
-                  attributes = nil
+                  attributes = Hash.new
                   attributes = {'mmlSg:code' => pitem.code} if pitem.code
                   attributes['mmlSg:system'] = pitem.system if pitem.system
                   xml.mmlSg :operation, pitem.operation, attributes if pitem.operation
                   xml.mmlSg :operationElement do
                     pitem.operationElement.each do |oitem|
                       xml.mmlSg :operationElementItem do
-                        attributes = nil
+                        attributes = Hash.new
                         attributes = {'mmlSg:code' => oitem.code}
                         attributes['mmlSg:system'] = oitem.system
                         xml.mmlSg :title, oitem.title, attributes
@@ -597,6 +597,42 @@ module MML
                 end
               end
             end
+            xml.mmlSg :surgicalStaffs do
+              sitem.surgicalStaffs.each do |staff|
+                attributes = Hash.new
+                attributes = {'mmlSg:staffClass' => staff.staffClass} if staff.staffClass
+                attributes['mmlSg:superiority'] = staff.superiority if staff.superiority
+                xml.mmlSg :staff, attributes do
+                  xml << staff.staffInfo.to_xml
+                end
+              end
+            end if sitem.surgicalStaffs
+            xml.mmlSg :anesthesiaProcedure do
+              sitem.anesthesiaProcedure.each do |aproc|
+                attributes = Hash.new
+                attributes['mmlSg:code'] = aproc.code if aproc.code
+                attributes['mmlSg:system'] = aproc.system if aproc.system
+                xml.mmlSg :title, aproc.title, attributes
+              end
+            end if sitem.anesthesiaProcedure
+            xml.mmlSg :anesthesiologists do
+              sitem.anesthesiologists.each do |staff|
+                attributes = Hash.new
+                attributes['mmlSg:staffClass'] = staff.staffClass if staff.staffClass
+                attributes['mmlSg:superiority'] = staff.superiority if staff.superiority
+                xml.mmlSg :staff, attributes do
+                  xml << staff.staffInfo.to_xml
+                end
+              end
+            end if sitem.anesthesiologists
+            xml.mmlSg :anesthesiaDuration, sitem.anesthesiaDuration if sitem.anesthesiaDuration
+            xml.mmlSg :operativeNotes, sitem.operativeNotes if sitem.operativeNotes
+            xml.mmlSg :referenceInfo do
+              sitem.referenceInfo.each do |ref|
+                xml << ref.to_xml
+              end
+            end if sitem.referenceInfo
+            xml.mmlSg :memo, sitem.memo if sitem.memo
           end
         end
       end
@@ -605,7 +641,7 @@ module MML
 
   class SurgeryItem < Base
     mandatory_attribute :date, :surgicalDiagnosis, :surgicalProcedure
-    optional_attribute :type, :startTime, :duration, :surgicalDepartment, :patientDepartment, :anesthesiaProcedure, :anesthesiologists, :anesthesiaDuration, :operativeNotes, :referenceInfo, :memo
+    optional_attribute :type, :startTime, :duration, :surgicalDepartment, :surgicalStaffs, :patientDepartment, :anesthesiaProcedure, :anesthesiologists, :anesthesiaDuration, :operativeNotes, :referenceInfo, :memo
   end
 
   class ProcedureItem < Base

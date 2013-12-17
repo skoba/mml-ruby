@@ -14,9 +14,9 @@ describe MML::Surgery do
   let(:anesthesiologist_id) {MML::Id.new(type: 'facility', tableId: 'MML0024', value: '00123')}
   let(:anesthesiologist_name) {MML::Name.new(repCode: 'A', fullname: 'Kenji ARAKI')}
   let(:anesthesiologist_info) {MML::PersonalizedInfo.new(id: staff_id, personName: [anesthesiologist_name])}
-  let(:anesthesiologist) {MML::Anesthesiologist.new(staffClass: 'main anesthesiologist', superiority: 1, staffInfo: anesthesiologist_info)}
+  let(:anesthesiologist) {MML::Anesthesiologist.new(staffClass: 'main anesthesiologist', superiority: 0, staffInfo: anesthesiologist_info)}
   let(:ext_ref) {MML::ExtRef.new(contentType: 'image/gif', medicalRole: 'surgicalFigure', title: 'skin incision', href: 'patient001/surgicalFigure001.gif')}
-  let(:surgery_item) {MML::SurgeryItem.new(type: 'elective', date: '2013-12-10', startTime: '08:30', duration: 'PT5H25M', surgicalDepartment: surgical_department, patientDepartment: patient_department, surgicalDiagnosis: [registered_diagnosis], surgicalProcedure: [procedure_item], anesthesiaProcedure: [anesthesia_procedure], anesthesiologists: [anesthesiologist], anesthesiaDuration: 'PT6H25M', operativeNotes: 'Total bleeding: 380ml', referenceInfo: [ext_ref], memo: 'This operation was well performed.')}
+  let(:surgery_item) {MML::SurgeryItem.new(type: 'elective', date: '2013-12-10', startTime: '08:30', duration: 'PT5H25M', surgicalDepartment: surgical_department, patientDepartment: patient_department, surgicalDiagnosis: [registered_diagnosis], surgicalProcedure: [procedure_item], surgicalStaffs: [staff], anesthesiaProcedure: [anesthesia_procedure], anesthesiologists: [anesthesiologist], anesthesiaDuration: 'PT6H25M', operativeNotes: 'Total bleeding: 380ml', referenceInfo: [ext_ref], memo: 'This operation was well performed.')}
   let(:surgery) {MML::Surgery.new(surgeryItem: [surgery_item])}
 
   it 'is an instance of MML::Surgery' do
@@ -59,6 +59,31 @@ describe MML::Surgery do
     it {should match 'coronary artery bipass grafting</mmlSg:title></mmlSg:operationElementItem></mmlSg:operationElement>'}
     it {should match '<mmlSg:procedureMemo>off pump</mmlSg:procedureMemo></mmlSg:procedureItem>'}
     it {should match '</mmlSg:surgicalProcedure>'}
+    it {should match '<mmlSg:surgicalStaffs>'}
+    it {should match '<mmlSg:staff'}
+    it {should match 'mmlSg:staffClass="assistant"'}
+    it {should match 'mmlSg:superiority="1"'}
+    it {should match '><mmlPsi:PersonalizedInfo>'}
+    it {should match '<mmlNm:fullname>Hiroyuki Yoshihara</mmlNm:fullname>'}
+    it {should match '</mmlPsi:PersonalizedInfo></mmlSg:staff></mmlSg:surgicalStaffs>'}
+    it {should match '<mmlSg:anesthesiaProcedure><mmlSg:title'}
+    it {should match 'mmlSg:code="L002"'}
+    it {should match 'mmlSg:system="MHLW"'}
+    it {should match '</mmlSg:title></mmlSg:anesthesiaProcedure>'}
+    it {should match '<mmlSg:anesthesiologists><mmlSg:staff'}
+    it {should match 'mmlSg:staffClass="main anesthesiologist"'}
+    it {should match 'mmlSg:superiority="0"'}
+    it {should match '><mmlPsi:PersonalizedInfo><mmlCm:Id'}
+    it {should match '>00123</mmlCm:Id>'}
+    it {should match '</mmlPsi:PersonalizedInfo>'}
+    it {should match '</mmlSg:staff></mmlSg:anesthesiologists>'}
+    it {should match '<mmlSg:anesthesiaDuration>PT6H25M</mmlSg:anesthesiaDuration>'}
+    it {should match '<mmlSg:operativeNotes>Total bleeding: 380ml</mmlSg:operativeNotes>'}
+    it {should match '<mmlSg:referenceInfo>'}
+    it {should match '<mmlCm:extRef'}
+    it {should match 'mmlCm:href="patient001/surgicalFigure001.gif"'}
+    it {should match '</mmlSg:referenceInfo>'}
+    it {should match '<mmlSg:memo>This operation was well performed.</mmlSg:memo>'}
     it {should match '</mmlSg:surgeryItem>'}
     it {should match '</mmlSg:SurgeryModule>'}
   end

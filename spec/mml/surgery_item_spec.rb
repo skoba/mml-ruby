@@ -16,7 +16,7 @@ describe MML::SurgeryItem do
   let(:anesthesiologist_info) {MML::PersonalizedInfo.new(id: staff_id, personName: [anesthesiologist_name])}
   let(:anesthesiologist) {MML::Anesthesiologist.new(staffClass: 'main anesthesiologist', superiority: 1, staffInfo: anesthesiologist_info)}
   let(:ext_ref) {MML::ExtRef.new(contentType: 'image/gif', medicalRole: 'surgicalFigure', title: 'skin incision', href: 'patient001/surgicalFigure001.gif')}
-  let(:surgery_item) {MML::SurgeryItem.new(type: 'elective', date: '2013-12-10', startTime: '08:30', duration: 'PT5H25M', surgicalDepartment: surgical_department, patientDepartment: patient_department, surgicalDiagnosis: [registered_diagnosis], surgicalProcedure: [procedure_item], anesthesiaProcedure: [anesthesia_procedure], anesthesiologists: [anesthesiologist], anesthesiaDuration: 'PT6H25M', operativeNotes: 'Total bleeding: 380ml', referenceInfo: [ext_ref], memo: 'This operation was well performed.')}
+  let(:surgery_item) {MML::SurgeryItem.new(type: 'elective', date: '2013-12-10', startTime: '08:30', duration: 'PT5H25M', surgicalDepartment: surgical_department, patientDepartment: patient_department, surgicalDiagnosis: [registered_diagnosis], surgicalProcedure: [procedure_item], surgicalStaffs: [staff],anesthesiaProcedure: [anesthesia_procedure], anesthesiologists: [anesthesiologist], anesthesiaDuration: 'PT6H25M', operativeNotes: 'Total bleeding: 380ml', referenceInfo: [ext_ref], memo: 'This operation was well performed.')}
 
   it 'is an instance of MML::SurgicalItem' do
     expect(surgery_item).to be_an_instance_of MML::SurgeryItem
@@ -80,6 +80,10 @@ describe MML::SurgeryItem do
 
   it 'surgicalProcedure is properly assigned' do
     expect(surgery_item.surgicalProcedure[0].operation).to eq 'right lobectomy'
+  end
+
+  it 'surgicalStaffs should be assigned properly' do
+    expect(surgery_item.surgicalStaffs[0].staffClass).to eq 'assistant'
   end
 
   it 'anesthesiaProcedure should be assigned properly' do
