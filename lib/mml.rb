@@ -31,9 +31,24 @@ module MML
       end
     end
 
+    def to_xml
+      eval %{
+        xml = Builder::XmlMarkup.new
+        #{xml_builder}
+      }
+    end
+
     private
     def xml
       @xml ||= Builder::XmlMarkup.new
+    end
+
+    def xml_builder
+      File.read(File.join(File.dirname(__FILE__), 'xml', "#{builder_file}.xml.builder"))
+    end
+
+    def builder_file
+      self.class.to_s.split('::')[1].downcase
     end
   end
 
@@ -44,60 +59,6 @@ module MML
   class PatientInfo < Base
     mandatory_attribute :masterId, :personName, :birthday, :sex
     optional_attribute :otherId, :nationality, :race, :marital, :addresses, :emailAddresses, :phones, :accountNumber, :socialIdentification, :death
-
-    def to_xml
-      xml.mmlPi :PatientModule do
-        xml.mmlPi :uniqueInfo do
-          xml.mmlPi :masterId do
-            xml << masterId.to_xml
-          end
-          otherId.each do |item|
-            xml.mmlPi :otherId, {'mmlPi:type' => item.type} do
-              xml << item.id.to_xml
-            end
-          end if otherId
-        end
-        personName.each do |name|
-          xml.mmlPi :personName do
-            xml << name.to_xml
-          end
-        end
-        xml.mmlPi :birthday, birthday
-        xml.mmlPi :sex, sex
-        if nationality
-          attributes = Hash.new
-          attributes = {'mmlPi:subtype' => nationality.subtype} if nationality.subtype
-          xml.mmlPi :nationality, nationality.value, attributes
-        end
-        if race
-          attributes = Hash.new
-          attributes = {'mmlPi:raceCode' => race.raceCode} if race.raceCode
-          attributes['mmlPi:raceCodeId'] = race.raceCodeId if race.raceCodeId
-          xml.mmlPi :race, race.value, attributes
-        end
-        xml.mmlPi :marital, marital
-        xml.mmlPi :addresses do
-          addresses.each do |address|
-            xml << address.to_xml
-          end
-        end if addresses
-        xml.mmlPi :emailAddresses do
-          emailAddresses.each do |email|
-            xml.mmlCm :email, email
-          end if emailAddresses
-        end if emailAddresses
-        xml.mmlPi :phones do
-          phones.each do |phone|
-            xml << phone.to_xml
-          end
-        end if phones
-        xml.mmlPi :accountNumber, accountNumber if accountNumber
-        xml.mmlPi :socialIdentification, socialIdentification if socialIdentification
-        death_attr = Hash.new
-        death_attr = {'mmlPi:date' => death.date} if death.date
-        xml.mmlPi :death, death.flag.to_s, death_attr unless death.nil?
-      end
-    end
   end
 
   class OtherId < Base
@@ -122,91 +83,6 @@ module MML
   class Insurance < Base
     optional_attribute :countryType, :insuranceClass, :insuranceNumber, :personName, :clientInfo, :continuedDiseases, :paymentInRatio, :paymentOutRatio, :insuredInfo, :workInfo, :publicInsurance
     mandatory_attribute :group, :number, :familyClass, :startDate, :expiredDate
-
-    def to_xml
-      attributes = {'mmlHi:countryType' => countryType } if countryType
-      xml.mmlHi :HealthInsuranceModule, attributes do
-        attributes = {'mmlHi:ClassCode' => '01'} if insuranceClass.classCode
-        attributes['mmlHi:tableId'] = insuranceClass.tableId if insuranceClass.tableId
-        xml.mmlHi :insuranceClass, insuranceClass.value, attributes if insuranceClass
-        xml.mmlHi :insuranceNumber, insuranceNumber
-        xml.mmlHi :clientId do
-          xml.mmlHi :group, group
-          xml.mmlHi :number, number
-        end
-        xml.mmlHi :familyClass, familyClass
-        xml.mmlHi :clientInfo do
-          xml.mmlHi :personName do
-            clientInfo.personName.each do |name|
-              xml << name.to_xml
-            end
-          end if clientInfo.personName
-          xml.mmlHi :addresses do
-            clientInfo.addresses.each do |address|
-              xml << address.to_xml
-            end
-          end if clientInfo.addresses
-          xml.mmlHi :phones do
-            clientInfo.phones.each do |phone|
-              xml << phone.to_xml
-            end
-          end if clientInfo.phones
-        end if clientInfo
-        xml.mmlHi :continuedDiseases do
-          continuedDiseases.each do |disease|
-            xml.mmlHi :disease, disease
-          end
-        end if continuedDiseases
-        xml.mmlHi :startDate, startDate
-        xml.mmlHi :expiredDate, expiredDate
-        xml.mmlHi :paymentInRatio, paymentInRatio if paymentInRatio
-        xml.mmlHi :paymentOutRatio, paymentOutRatio if paymentOutRatio
-        xml.mmlHi :insuredInfo do
-          xml.mmlHi :facility do
-            xml << insuredInfo.facility.to_xml if insuredInfo.facility
-          end if insuredInfo.facility
-          xml.mmlHi :addresses do
-            insuredInfo.addresses.each do |address|
-              xml << address.to_xml
-            end
-          end if insuredInfo.addresses
-          xml.mmlHi :phones do
-            insuredInfo.phones.each do |phone|
-              xml << phone.to_xml
-            end
-          end if insuredInfo.phones
-        end if insuredInfo
-        xml.mmlHi :workInfo do
-          xml.mmlHi :facility do
-            xml << workInfo.facility.to_xml
-          end if workInfo.facility
-          xml.mmlHi :addresses do
-            workInfo.addresses.each do |address|
-              xml << address.to_xml
-            end
-          end if workInfo.addresses
-          xml.mmlHi :phones do
-            workInfo.phones.each do |phone|
-              xml << phone.to_xml
-            end
-          end
-        end if workInfo
-        xml.mmlHi :publicInsurance do
-          publicInsurance.each do |item|
-            attribute = Hash.new
-            attribute = {'mmlHi:priority' => item.priority} if item.priority
-            xml.mmlHi :publicInsuranceItem, attribute do
-              xml.mmlHi :providerName, item.providerName if item.providerName
-              xml.mmlHi :provider, item.provider
-              xml.mmlHi :recipient, item.recipient
-              xml.mmlHi :startDate, item.startDate
-              xml.mmlHi :expiredDate, item.expiredDate
-              xml.mmlHi :paymentRatio, item.paymentRatio, {'mmlHi:ratioType' => item.ratioType} if item.paymentRatio
-            end
-          end
-        end if publicInsurance
-      end
-    end
   end
 
   class InsuranceClass < Base
@@ -229,36 +105,6 @@ module MML
   class RegisteredDiagnosis < Base
     mandatory_attribute :diagnosis
     optional_attribute :code, :system, :diagnosisContents, :categories, :startDate, :endDate, :outcome, :firstEncounterDate, :relatedHealthInsurance
-
-    def to_xml
-      xml.mmlRd :RegisteredDiagnosisModule do
-        attributes = Hash.new
-        attributes = {'mmlRd:code' => code} if code
-        attributes['mmlRd:system'] = system if system
-        xml.mmlRd :diagnosis, attributes, diagnosis
-        xml.mmlRd :diagnosisContens do
-          diagnosisContents.each do |item|
-            attributes = Hash.new
-            attributes = {'mmlRd:code' => item.code} if item.code
-            attributes['mmlRd:system'] = item.system if item.system
-            xml.mmlRd :dxItem, attributes do
-              xml.mmlRd :name, item.name
-            end
-          end
-        end if diagnosisContents
-        xml.mmlRd :categories do
-          categories.each do |category|
-            xml.mmlRd :category, {'mmlRd:tableId' => category.tableId}, category.value
-          end
-        end if categories
-        xml.mmlRd :startDate, startDate if startDate
-        xml.mmlRd :endDate, endDate if endDate
-        xml.mmlRd :outcome, outcome if outcome
-        xml.mmlRd :firstEncounterDate, firstEncounterDate if firstEncounterDate
-        attributes = 
-        xml.mmlRd :relatedHealthInsurance, {'mmlRd:uid' => relatedHealthInsurance} if relatedHealthInsurance
-      end
-    end
   end
 
   class DxItem < Base
@@ -273,58 +119,10 @@ module MML
   class Lifestyle < Base
     mandatory_attribute :occupation, :tobacco, :alcohol
     optional_attribute :other
-
-    def to_xml
-      xml.mmlLs :LifestyleModule do
-        xml.mmlLs :occupation, occupation
-        xml.mmlLs :tobacco, tobacco
-        xml.mmlLs :alcohol, alcohol
-        xml.mmlLs :other, other if other
-      end
-    end
   end
 
   class BaseClinic < Base
     optional_attribute :allergy, :bloodtype, :infection
-
-    def to_xml
-      xml.mmlBc :BaseClinicModule do
-        xml.mmlBc :allergy do
-          allergy.each do |item|
-            xml.mmlBc :allergyItem do
-              xml.mmlBc :factor, item.factor
-              xml.mmlBc :severity, item.severity if item.severity
-              xml.mmlBc :identifiedDate, item.identifiedDate if item.identifiedDate
-              xml.mmlBc :memo, item.memo if item.memo
-            end
-          end
-        end if allergy
-        xml.mmlBc :bloodtype do
-          xml.mmlBc :abo, bloodtype.abo
-          xml.mmlBc :rh, bloodtype.rh if bloodtype.rh
-          xml.mmlBc :others do
-            bloodtype.others.each do |other|
-              xml.mmlBc :other do
-                xml.mmlBc :typeName, other.typeName
-                xml.mmlBc :typeJudgement, other.typeJudgement
-                xml.mmlBc :description, other.description if other.description
-              end
-            end
-          end if bloodtype.others
-          xml.mmlBc :memo, bloodtype.memo if bloodtype.memo
-        end if bloodtype
-        xml.mmlBc :infection do
-          infection.each do |item|
-            xml.mmlBc :infectionItem do
-              xml.mmlBc :factor, item.factor
-              xml.mmlBc :examValue, item.examValue
-              xml.mmlBc :identifiedDate, item.identifiedDate if item.identifiedDate
-              xml.mmlBc :memo, item.memo if item.memo
-            end
-          end
-        end if infection
-      end
-    end
   end
 
   class AllergyItem < Base
@@ -350,56 +148,6 @@ module MML
   class FirstClinic < Base
     optional_attribute :familyHistory, :birthInfo, :vaccination, :pastHistory,
                        :chiefComplaints, :presentIllnessNotes
-
-    def to_xml
-      xml.mmlFcl :FirstClinicModule do
-        xml.mmlFcl :familyHistory do
-          familyHistory.each do |item|
-            xml.mmlFcl :familyHistoryItem do
-              xml.mmlFcl :relation, item.relation
-              xml << item.registeredDiagnosis.to_xml
-              xml.mmlFcl :age, item.age
-              xml.mmlFcl :memo, item.memo
-            end
-          end
-        end if familyHistory
-        xml.mmlFcl :childhood do
-          xml.mmlFcl :birthInfo do
-            xml << birthInfo.facility.to_xml if birthInfo.facility
-            xml.mmlFcl :deliveryWeeks, birthInfo.deliveryWeeks if birthInfo.deliveryWeeks
-            xml.mmlFcl :deliveryMethod, birthInfo.deliveryMethod if birthInfo.deliveryMethod
-            xml.mmlFcl :bodyWeight, birthInfo.bodyWeight, {'mmlFcl:unit' => birthInfo.bodyWeightUnit} if birthInfo.bodyWeight
-            xml.mmlFcl :bodyHeight, birthInfo.bodyHeight, {'mmlFcl:unit' => birthInfo.bodyHeightUnit} if birthInfo.bodyHeight
-            xml.mmlFcl :chestCircumference, birthInfo.chestCircumference, {'mmlFcl:unit' => birthInfo.chestCircumferenceUnit} if birthInfo.chestCircumference
-            xml.mmlFcl :headCircumference, birthInfo.headCircumference, {'mmlFcl:unit' => birthInfo.headCircumferenceUnit} if birthInfo.headCircumference
-            xml.mmlFcl :memo, birthInfo.memo if birthInfo.memo
-          end if birthInfo
-          xml.mmlFcl :vaccination do
-            vaccination.each do |item|
-              xml.mmlFcl :vaccinationItem do
-                xml.mmlFcl :vaccine, item.vaccine
-                xml.mmlFcl :injected, item.injected
-                xml.mmlFcl :age, item.age if item.age
-                xml.mmlFcl :memo, item.memo if item.memo
-              end
-            end
-          end if vaccination
-        end if birthInfo or vaccination
-        xml.mmlFcl :pastHistory do
-          xml.mmlFcl :freeNote, pastHistory.freeNote if pastHistory.freeNote
-          pastHistory.pastHistoryItem.each do |item|
-            xml.mmlFcl :pastHistoryItem do
-              xml.mmlFcl :timeExpression, item.timeExpression
-              item.eventExpression.each do |event|
-                xml.mmlFcl :eventExpression, event
-              end if item.eventExpression
-            end
-          end if pastHistory.pastHistoryItem
-        end if pastHistory
-        xml.mmlFcl :chiefComplaints, chiefComplaints if chiefComplaints
-        xml.mmlFcl :presentIllnessNotes, presentIllnessNotes if presentIllnessNotes
-      end
-    end
   end
 
   class FamilyHistoryItem < Base
@@ -427,98 +175,6 @@ module MML
 
   class ProgressCourse < Base
     optional_attribute :freeExpression, :extRef, :structuredExpression
-
-    def to_xml
-      xml.mmlPc :ProgressCourseModule do
-        xml.mmlPc :FreeExpression do
-          xml << freeExpression
-          extRef.each do |ref|
-            xml << ref.to_xml
-          end if extRef
-        end if freeExpression
-        xml.mmlPc :structuredExpression do
-          structuredExpression.each do |item|
-            xml.mmlPc :problemItem do
-              attributes = Hash.new
-              attributes = {'mmlPc:dxUid' => item.dxUid} if item.dxUid
-              xml.mmlPc :problem, item.problem, attributes
-              xml.mmlPc :subjective do
-                xml.mmlPc :freeNotes, item.subjective.freeNotes if item.subjective.freeNotes
-                xml.mmlPc :subjectiveItem do
-                  item.subjective.subjectiveItem.each do |sitem|
-                    xml.mmlPc :timeExpression, sitem.timeExpression
-                    sitem.eventExpression.each do |event|
-                      xml.mmlPc :eventExpression, event
-                    end if sitem.eventExpression
-                  end
-                end if item.subjective.subjectiveItem
-              end if item.subjective
-              xml.mmlPc :objective do
-                xml.mmlPc :objectiveNotes, item.objective.objectiveNotes if item.objective.objectiveNotes
-                xml.mmlPc :physicalExam do
-                  item.objective.physicalExam.each do |pitem|
-                    xml.mmlPc :physicalExamItem do
-                      xml.mmlPc :title, pitem.title
-                      xml.mmlPc :result, pitem.result
-                      xml.mmlPc :interpretation, pitem.interpretation if pitem.interpretation
-                      xml.mmlPc :referenceInfo do
-                        pitem.referenceInfo.each do |ref|
-                          xml << ref.to_xml
-                        end
-                      end if pitem.referenceInfo
-                    end
-                  end
-                end if item.objective.physicalExam
-                xml.mmlPc :testResult do
-                  xml << item.objective.testResult.value
-                  item.objective.testResult.link.each do |ref|
-                    xml << ref.to_xml
-                  end if item.objective.testResult.link
-                end if item.objective.testResult
-                xml.mmlPc :rxRecord do
-                  xml << item.objective.rxRecord.value
-                  item.objective.rxRecord.link.each do |ref|
-                    xml << ref.to_xml
-                  end if item.objective.rxRecord.link
-                end if item.objective.rxRecord
-                xml.mmlPc :txRecord do
-                  xml << item.objective.txRecord.value
-                  item.objective.txRecord.link.each do |ref|
-                    xml << ref.to_xml
-                  end
-                end if item.objective.txRecord
-              end if item.objective
-              xml.mmlPc :assessment do
-                item.assessment.each do |aitem|
-                  xml.mmlPc :assessmentItem, aitem
-                end
-              end if item.assessment
-              xml.mmlPc :plan do
-                xml.mmlPc :testOrder do
-                  xml << item.plan.testOrder.value
-                  item.plan.testOrder.link.each do |ref|
-                    xml << ref.to_xml
-                  end if item.plan.testOrder.link
-                end if item.plan.testOrder
-                xml.mmlPc :rxOrder do
-                  xml << item.plan.rxOrder.value
-                  item.plan.rxOrder.link.each do |ref|
-                    xml << ref.to_xml
-                  end if item.plan.rxOrder.link
-                end if item.plan.rxOrder
-                xml.mmlPc :txOrder do
-                  xml << item.plan.txOrder.value
-                  item.plan.txOrder.link.each do |ref|
-                    xml << ref.to_xml
-                  end if item.plan.txOrder.link
-                end if item.plan.txOrder
-                xml.mmlPc :planNotes, item.plan.planNotes
-              end if item.plan
-            end
-          end
-        end if structuredExpression
-      end
-    end
   end
 
   class ProblemItem < Base
@@ -553,90 +209,6 @@ module MML
 
   class Surgery < Base
     mandatory_attribute :surgeryItem
-
-    def to_xml
-      xml.mmlSg :SurgeryModule do
-        surgeryItem.each do |sitem|
-          xml.mmlSg :surgeryItem do
-            attribute = Hash.new
-            attribute = {'mmlSg:type' => sitem.type} if sitem.type
-            xml.mmlSg :surgicalInfo, attribute do
-              xml.mmlSg :date, sitem.date
-              xml.mmlSg :startTime, sitem.startTime if sitem.startTime
-              xml.mmlSg :duration, sitem.duration if sitem.duration
-              xml.mmlSg :surgicalDepartment do
-                xml << sitem.surgicalDepartment.to_xml
-              end if sitem.surgicalDepartment
-              xml.mmlSg :patientDepartment do
-                xml << sitem.patientDepartment.to_xml
-              end if sitem.patientDepartment
-            end
-            xml.mmlSg :surgicalDiagnosis do
-              sitem.surgicalDiagnosis.each do |ditem|
-                xml << ditem.to_xml
-              end
-            end
-            xml.mmlSg :surgicalProcedure do
-              sitem.surgicalProcedure.each do |pitem|
-                xml.mmlSg :procedureItem do
-                  attributes = Hash.new
-                  attributes = {'mmlSg:code' => pitem.code} if pitem.code
-                  attributes['mmlSg:system'] = pitem.system if pitem.system
-                  xml.mmlSg :operation, pitem.operation, attributes if pitem.operation
-                  xml.mmlSg :operationElement do
-                    pitem.operationElement.each do |oitem|
-                      xml.mmlSg :operationElementItem do
-                        attributes = Hash.new
-                        attributes = {'mmlSg:code' => oitem.code}
-                        attributes['mmlSg:system'] = oitem.system
-                        xml.mmlSg :title, oitem.title, attributes
-                      end
-                    end
-                  end if pitem.operationElement
-                  xml.mmlSg :procedureMemo, pitem.procedureMemo if pitem.procedureMemo
-                end
-              end
-            end
-            xml.mmlSg :surgicalStaffs do
-              sitem.surgicalStaffs.each do |staff|
-                attributes = Hash.new
-                attributes = {'mmlSg:staffClass' => staff.staffClass} if staff.staffClass
-                attributes['mmlSg:superiority'] = staff.superiority if staff.superiority
-                xml.mmlSg :staff, attributes do
-                  xml << staff.staffInfo.to_xml
-                end
-              end
-            end if sitem.surgicalStaffs
-            xml.mmlSg :anesthesiaProcedure do
-              sitem.anesthesiaProcedure.each do |aproc|
-                attributes = Hash.new
-                attributes['mmlSg:code'] = aproc.code if aproc.code
-                attributes['mmlSg:system'] = aproc.system if aproc.system
-                xml.mmlSg :title, aproc.title, attributes
-              end
-            end if sitem.anesthesiaProcedure
-            xml.mmlSg :anesthesiologists do
-              sitem.anesthesiologists.each do |staff|
-                attributes = Hash.new
-                attributes['mmlSg:staffClass'] = staff.staffClass if staff.staffClass
-                attributes['mmlSg:superiority'] = staff.superiority if staff.superiority
-                xml.mmlSg :staff, attributes do
-                  xml << staff.staffInfo.to_xml
-                end
-              end
-            end if sitem.anesthesiologists
-            xml.mmlSg :anesthesiaDuration, sitem.anesthesiaDuration if sitem.anesthesiaDuration
-            xml.mmlSg :operativeNotes, sitem.operativeNotes if sitem.operativeNotes
-            xml.mmlSg :referenceInfo do
-              sitem.referenceInfo.each do |ref|
-                xml << ref.to_xml
-              end
-            end if sitem.referenceInfo
-            xml.mmlSg :memo, sitem.memo if sitem.memo
-          end
-        end
-      end
-    end
   end
 
   class SurgeryItem < Base
@@ -664,6 +236,9 @@ module MML
 
   class Anesthesiologist < SurgicalStaff
     
+  end
+
+  class Summary < Base
   end
 
   require_relative 'mml/common'
