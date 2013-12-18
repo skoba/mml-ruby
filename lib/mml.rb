@@ -1,4 +1,6 @@
 require 'builder'
+require_relative 'mml/common'
+require_relative 'mml/version'
 
 module MML
   MML_NAMESPACE = 'xmlns:mml="http://www.medxml.net/MML"'
@@ -32,215 +34,240 @@ module MML
     end
 
     def to_xml
-      eval %{
-        xml = Builder::XmlMarkup.new
-        #{xml_builder}
-      }
+      xml = Builder::XmlMarkup.new
+      eval xml_builder
     end
 
     private
-    def xml
-      @xml ||= Builder::XmlMarkup.new
-    end
-
     def xml_builder
-      File.read(File.join(File.dirname(__FILE__), 'xml', "#{builder_file}.xml.builder"))
+      File.read(xml_builder_file)
     end
 
-    def builder_file
-      self.class.to_s.split('::')[1].downcase
+    def xml_builder_file
+      File.join(this_file_path, 'xml', "#{builder_file_prefix}.xml.builder")
+    end
+
+    def builder_file_prefix
+      self.class.to_s.split('::').last.downcase
+    end
+
+    def this_file_path
+      File.expand_path(File.dirname(__FILE__))
     end
   end
 
-  class V2Base < Base
-    MML_VERSION = '2.3'
+   class PatientInfo < Base
+     mandatory_attribute :masterId, :personName, :birthday, :sex
+     optional_attribute :otherId, :nationality, :race, :marital, :addresses,
+     :emailAddresses, :phones, :accountNumber, :socialIdentification, :death
+   end
+
+   class OtherId < Base
+     mandatory_attribute :id, :type
+   end
+
+   class Nationality < Base
+     mandatory_attribute :value
+     optional_attribute :subtype
+   end
+
+   class Death < Base
+     mandatory_attribute :flag
+     optional_attribute :date
+   end
+
+   class Race < Base
+     mandatory_attribute :value
+     optional_attribute :raceCode, :raceCodeId
+   end
+
+   class Insurance < Base
+     mandatory_attribute :group, :number, :familyClass, :startDate, :expiredDate
+     optional_attribute :countryType, :insuranceClass, :insuranceNumber,
+     :personName, :clientInfo, :continuedDiseases, :paymentInRatio,
+     :paymentOutRatio, :insuredInfo, :workInfo, :publicInsurance
+   end
+
+   class InsuranceClass < Base
+     mandatory_attribute :value, :classCode, :tableId
+   end
+
+   class InsuranceClient < Base
+     optional_attribute :personName, :addresses, :phones
+   end
+
+   class OrganizationInfo < Base
+     optional_attribute :facility, :addresses, :phones
+   end
+
+   class PublicInsuranceItem < Base
+     mandatory_attribute :priority, :provider, :recipient, :startDate, :expiredDate
+     optional_attribute :providerName, :paymentRatio, :ratioType
+   end
+
+   class RegisteredDiagnosis < Base
+     mandatory_attribute :diagnosis
+     optional_attribute :code, :system, :diagnosisContents, :categories, :startDate, :endDate, :outcome, :firstEncounterDate, :relatedHealthInsurance
+   end
+
+   class DxItem < Base
+     mandatory_attribute :name
+     optional_attribute :code, :system
+   end
+
+   class DiagnosticCategory < Base
+     mandatory_attribute :value, :tableId
+   end
+
+   class Lifestyle < Base
+     mandatory_attribute :occupation, :tobacco, :alcohol
+     optional_attribute :other
+   end
+
+   class BaseClinic < Base
+     optional_attribute :allergy, :bloodtype, :infection
+   end
+
+   class AllergyItem < Base
+     mandatory_attribute :factor
+     optional_attribute :severity, :identifiedDate, :memo
+   end
+
+   class BloodType < Base
+     mandatory_attribute :abo
+     optional_attribute :rh, :others, :memo
+   end
+
+   class OtherBloodType < Base
+     mandatory_attribute :typeName, :typeJudgement
+     optional_attribute :description
+   end
+
+   class InfectionItem < Base
+     mandatory_attribute :factor, :examValue
+     optional_attribute :identifiedDate, :memo
+   end
+
+   class FirstClinic < Base
+     optional_attribute :familyHistory, :birthInfo, :vaccination, :pastHistory,
+                        :chiefComplaints, :presentIllnessNotes
+   end
+
+   class FamilyHistoryItem < Base
+     mandatory_attribute :relation, :registeredDiagnosis
+     optional_attribute :age, :memo
+   end
+
+   class BirthInfo < Base
+     optional_attribute :facility, :deliveryWeeks, :deliveryMethod, :bodyWeight, :bodyWeightUnit, :bodyHeight, :bodyHeightUnit, :chestCircumference, :chestCircumferenceUnit, :headCircumference, :headCircumferenceUnit, :memo
+   end
+
+   class VaccinationItem < Base
+     mandatory_attribute :vaccine, :injected
+     optional_attribute :age, :memo
+   end
+
+   class PastHistory < Base
+     optional_attribute :freeNote, :pastHistoryItem
+   end
+
+   class PastHistoryItem < Base
+     mandatory_attribute :timeExpression
+     optional_attribute :eventExpression
+   end
+
+   class ProgressCourse < Base
+     optional_attribute :freeExpression, :extRef, :structuredExpression
+   end
+
+   class ProblemItem < Base
+     optional_attribute :problem, :dxUid, :subjective, :objective, :assessment, :plan
+   end
+
+   class ValueWithLink < Base
+     mandatory_attribute :value
+     optional_attribute :link
+   end
+
+   class SubjectiveItem < Base
+     mandatory_attribute :timeExpression, :eventExpression
+   end
+
+   class Subjective < Base
+     optional_attribute :freeNotes, :subjectiveItem
+   end
+
+   class Objective < Base
+     optional_attribute :objectiveNotes, :physicalExam, :testResult, :rxRecord, :txRecord
+   end
+
+   class PhysicalExamItem < Base
+     mandatory_attribute :title, :result
+     optional_attribute :interpretation, :referenceInfo
+   end
+
+   class Plan < Base
+     optional_attribute :testOrder, :rxOrder, :txOrder, :planNotes
+   end
+
+   class Surgery < Base
+     mandatory_attribute :surgeryItem
+   end
+
+   class SurgeryItem < Base
+     mandatory_attribute :date, :surgicalDiagnosis, :surgicalProcedure
+     optional_attribute :type, :startTime, :duration, :surgicalDepartment,
+     :surgicalStaffs, :patientDepartment, :anesthesiaProcedure,
+     :anesthesiologists, :anesthesiaDuration, :operativeNotes,
+     :referenceInfo, :memo
+   end
+
+   class ProcedureItem < Base
+     optional_attribute :operation, :code, :system, :operationElement, :procedureMemo
+   end
+
+   class OperationElementItem < Base
+     mandatory_attribute :title
+     optional_attribute :code, :system
+   end
+
+   class SurgicalStaff < Base
+     mandatory_attribute :staffInfo
+     optional_attribute :staffClass, :superiority
+   end
+
+   class AnesthesiaProcedure < OperationElementItem
+
+   end
+
+   class Anesthesiologist < SurgicalStaff
+
+   end
+
+   class Summary < Base
+
+   end
+
+   class ServiceHistory < Base
+     optional_attribute :start, :end
+   end
+
+   class OutpatientItem < Base
+     mandatory_attribute :date
+     optional_attribute :first, :emergency, :outPatientCondition, :staffs
+   end
+
+   class InpatientItem < Base
+
+   end
+
+   class Admission < Base
+     mandatory_attribute :date
+     optional_attribute :admissionCondition, :emergency, :referFrom
+   end
+
+  class StaffInfo < Base
+    mandatory_attribute :personalizedInfo, :creatorLicense
   end
-
-  class PatientInfo < Base
-    mandatory_attribute :masterId, :personName, :birthday, :sex
-    optional_attribute :otherId, :nationality, :race, :marital, :addresses, :emailAddresses, :phones, :accountNumber, :socialIdentification, :death
-  end
-
-  class OtherId < Base
-    mandatory_attribute :id, :type
-  end
-
-  class Nationality < Base
-    optional_attribute :subtype
-    mandatory_attribute :value
-  end
-
-  class Death < Base
-    mandatory_attribute :flag
-    optional_attribute :date
-  end
-
-  class Race < Base
-    optional_attribute :raceCode, :raceCodeId
-    mandatory_attribute :value
-  end
-
-  class Insurance < Base
-    optional_attribute :countryType, :insuranceClass, :insuranceNumber, :personName, :clientInfo, :continuedDiseases, :paymentInRatio, :paymentOutRatio, :insuredInfo, :workInfo, :publicInsurance
-    mandatory_attribute :group, :number, :familyClass, :startDate, :expiredDate
-  end
-
-  class InsuranceClass < Base
-    mandatory_attribute :value, :classCode, :tableId
-  end
-
-  class InsuranceClient < Base
-    optional_attribute :personName, :addresses, :phones
-  end
-
-  class OrganizationInfo < Base
-    optional_attribute :facility, :addresses, :phones
-  end
-
-  class PublicInsuranceItem < Base
-    mandatory_attribute :priority, :provider, :recipient, :startDate, :expiredDate
-    optional_attribute :providerName, :paymentRatio, :ratioType
-  end
-
-  class RegisteredDiagnosis < Base
-    mandatory_attribute :diagnosis
-    optional_attribute :code, :system, :diagnosisContents, :categories, :startDate, :endDate, :outcome, :firstEncounterDate, :relatedHealthInsurance
-  end
-
-  class DxItem < Base
-    mandatory_attribute :name
-    optional_attribute :code, :system
-  end
-
-  class DiagnosticCategory < Base
-    mandatory_attribute :value, :tableId
-  end
-
-  class Lifestyle < Base
-    mandatory_attribute :occupation, :tobacco, :alcohol
-    optional_attribute :other
-  end
-
-  class BaseClinic < Base
-    optional_attribute :allergy, :bloodtype, :infection
-  end
-
-  class AllergyItem < Base
-    mandatory_attribute :factor
-    optional_attribute :severity, :identifiedDate, :memo
-  end
-
-  class BloodType < Base
-    mandatory_attribute :abo
-    optional_attribute :rh, :others, :memo
-  end
-
-  class OtherBloodType < Base
-    mandatory_attribute :typeName, :typeJudgement
-    optional_attribute :description
-  end
-
-  class InfectionItem < Base
-    mandatory_attribute :factor, :examValue
-    optional_attribute :identifiedDate, :memo
-  end
-
-  class FirstClinic < Base
-    optional_attribute :familyHistory, :birthInfo, :vaccination, :pastHistory,
-                       :chiefComplaints, :presentIllnessNotes
-  end
-
-  class FamilyHistoryItem < Base
-    mandatory_attribute :relation, :registeredDiagnosis
-    optional_attribute :age, :memo
-  end
-
-  class BirthInfo < Base
-    optional_attribute :facility, :deliveryWeeks, :deliveryMethod, :bodyWeight, :bodyWeightUnit, :bodyHeight, :bodyHeightUnit, :chestCircumference, :chestCircumferenceUnit, :headCircumference, :headCircumferenceUnit, :memo
-  end
-
-  class VaccinationItem < Base
-    mandatory_attribute :vaccine, :injected
-    optional_attribute :age, :memo
-  end
-
-  class PastHistory < Base
-    optional_attribute :freeNote, :pastHistoryItem
-  end
-
-  class PastHistoryItem < Base
-    mandatory_attribute :timeExpression
-    optional_attribute :eventExpression
-  end
-
-  class ProgressCourse < Base
-    optional_attribute :freeExpression, :extRef, :structuredExpression
-  end
-
-  class ProblemItem < Base
-    optional_attribute :problem, :dxUid, :subjective, :objective, :assessment, :plan
-  end
-
-  class ValueWithLink < Base
-    mandatory_attribute :value
-    optional_attribute :link
-  end
-
-  class SubjectiveItem < Base
-    mandatory_attribute :timeExpression, :eventExpression
-  end
-
-  class Subjective < Base
-    optional_attribute :freeNotes, :subjectiveItem
-  end
-
-  class Objective < Base
-    optional_attribute :objectiveNotes, :physicalExam, :testResult, :rxRecord, :txRecord
-  end
-
-  class PhysicalExamItem < Base
-    mandatory_attribute :title, :result
-    optional_attribute :interpretation, :referenceInfo
-  end
-
-  class Plan < Base
-    optional_attribute :testOrder, :rxOrder, :txOrder, :planNotes
-  end
-
-  class Surgery < Base
-    mandatory_attribute :surgeryItem
-  end
-
-  class SurgeryItem < Base
-    mandatory_attribute :date, :surgicalDiagnosis, :surgicalProcedure
-    optional_attribute :type, :startTime, :duration, :surgicalDepartment, :surgicalStaffs, :patientDepartment, :anesthesiaProcedure, :anesthesiologists, :anesthesiaDuration, :operativeNotes, :referenceInfo, :memo
-  end
-
-  class ProcedureItem < Base
-    optional_attribute :operation, :code, :system, :operationElement, :procedureMemo
-  end
-
-  class OperationElementItem < Base
-    mandatory_attribute :title
-    optional_attribute :code, :system
-  end
-
-  class SurgicalStaff < Base
-    mandatory_attribute :staffInfo
-    optional_attribute :staffClass, :superiority
-  end
-
-  class AnesthesiaProcedure < OperationElementItem
-
-  end
-
-  class Anesthesiologist < SurgicalStaff
-    
-  end
-
-  class Summary < Base
-  end
-
-  require_relative 'mml/common'
-  require_relative 'mml/version'
 end
+
