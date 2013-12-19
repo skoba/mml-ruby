@@ -264,7 +264,8 @@ module MML
   end
 
   class InpatientItem < Base
-
+    mandatory_attribute :admission, :discharge
+    optional_attribute :staffs
   end
 
   class Admission < Base
