@@ -38,4 +38,8 @@ describe MML::Admission do
   it 'referer should be assigned properly' do
     expect(admission.referFrom.facility.name[0].value).to eq 'New Millenium Medical College Hospital'
   end
+
+  it 'referFrom is optional' do
+    expect {admission.referFrom = nil}.not_to raise_error
+  end
 end

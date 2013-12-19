@@ -1,7 +1,8 @@
 require 'builder'
-require_relative '../mml'
 
 module MML
+  require_relative '../mml'
+
   class BaseName < Base
     mandatory_attribute :value, :repCode
     optional_attribute :tableId
