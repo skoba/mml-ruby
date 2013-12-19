@@ -251,7 +251,7 @@ module MML
   end
 
   class Summary < Base
-
+    optional_attribute :registeredDiagnosis
   end
 
   class ServiceHistory < Base
