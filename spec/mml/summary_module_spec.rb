@@ -42,6 +42,7 @@ describe MML::Summary do
 
   let(:physicalExamRef) {MML::ExtRef.new(href: 'http://chest/auscultation')}
   let(:physicalExam) {MML::ValueWithLink.new(value: 'Heart sounds were clear', link: [physicalExamRef])}
+
   let(:summary) {MML::Summary.new(registeredDiagnosis: registered_diagnosis, deathInfo: death_info, surgeryModule: [surgery], chiefComplaints: 'Severe chest pain', patientProfile: 'The patient is a 40-year-old married forester.', history: 'On a background of good health, (snip)', physicalExam: physicalExam)}
 
   it 'is an instance of MML::Summary' do

@@ -286,5 +286,15 @@ module MML
     optional_attribute :date, :autopsy
     mandatory_attribute :value
   end
+
+  class ClinicalRecord < Base
+    mandatory_attribute :value
+    optional_attribute :date, :extRef, :relatedDoc
+  end
+
+  class RelatedDoc < Base
+    mandatory_attribute :value
+    optional_attribute :relation
+  end
 end
 
