@@ -251,11 +251,11 @@ module MML
   end
 
   class Summary < Base
-    optional_attribute :registeredDiagnosis
+    optional_attribute :registeredDiagnosis, :deathInfo, :surgeryModule, :chiefComplaints, :patientProfile, :history, :physicalExam
   end
 
   class ServiceHistory < Base
-    optional_attribute :start, :end
+    optional_attribute :start, :end, :outPatient, :inPatient
   end
 
   class OutpatientItem < Base
@@ -280,6 +280,11 @@ module MML
   class Discharge < Base
     mandatory_attribute :date
     optional_attribute :dischargeCondition, :outcome, :referTo
+  end
+
+  class DeathInfo < Base
+    optional_attribute :date, :autopsy
+    mandatory_attribute :value
   end
 end
 

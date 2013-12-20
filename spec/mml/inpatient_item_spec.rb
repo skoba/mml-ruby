@@ -1,5 +1,5 @@
 describe MML::InpatientItem do
-    let(:referer_id) {MML::Id.new(type: 'facility', tableId: 'MML0024', value: '23234567')}
+  let(:referer_id) {MML::Id.new(type: 'facility', tableId: 'MML0024', value: '23234567')}
   let(:referer_name) {MML::Name.new(repCode: 'A', tableId: 'MML0025', family: 'Ono', given: 'Yoko', degree: 'M.D.')}
   let(:referer_facility_name) {MML::FacilityName.new(repCode: 'A', tableId: 'MML0025', value: 'New Millenium Medical College Hospital')}
   let(:referer_facility_id) {MML::Id.new(type: 'insurance', tableId: 'MML0027', value: '801.006.3')}
