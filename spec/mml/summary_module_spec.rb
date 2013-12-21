@@ -127,10 +127,14 @@ describe MML::Summary do
   end
 
   it 'dischargeFindings is optional' do
-    expect{summary.dischargeFindings = nil}.not_to raise_error
+    expect {summary.dischargeFindings = nil}.not_to raise_error
   end
 
   it 'medication should be assigned properly' do
     expect(summary.medication.value).to eq 'Prescription on discharge'
+  end
+
+  it 'medication is optional' do
+    expect {summary.medication = nil}.not_to raise_error
   end
 end

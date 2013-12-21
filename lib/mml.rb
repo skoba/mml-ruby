@@ -251,7 +251,7 @@ module MML
   end
 
   class Summary < Base
-    optional_attribute :registeredDiagnosis, :deathInfo, :surgeryModule, :chiefComplaints, :patientProfile, :history, :physicalExam, :clinicalCourse, :dischargeFindings
+    optional_attribute :registeredDiagnosis, :deathInfo, :surgeryModule, :chiefComplaints, :patientProfile, :history, :physicalExam, :clinicalCourse, :dischargeFindings, :medication
   end
 
   class ServiceHistory < Base
