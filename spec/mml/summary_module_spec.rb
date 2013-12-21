@@ -43,7 +43,16 @@ describe MML::Summary do
   let(:physicalExamRef) {MML::ExtRef.new(href: 'http://chest/auscultation')}
   let(:physicalExam) {MML::ValueWithLink.new(value: 'Heart sounds were clear', link: [physicalExamRef])}
 
-  let(:summary) {MML::Summary.new(registeredDiagnosis: registered_diagnosis, deathInfo: death_info, surgeryModule: [surgery], chiefComplaints: 'Severe chest pain', patientProfile: 'The patient is a 40-year-old married forester.', history: 'On a background of good health, (snip)', physicalExam: physicalExam)}
+  let(:ext_ref) {MML::ExtRef.new(href: 'img://file/angio/')}
+  let(:related_doc) {MML::RelatedDoc.new(value: '11D1AC5400A0C94A814796045F768ED5', relation: 'detail')}
+  let(:clinical_record) {MML::ClinicalRecord.new(value: 'Emergency coronary angiography was carried out.', date: '2013-12-20', extRef: [ext_ref], relatedDoc: [related_doc])}
+
+  let(:discharge_ref) {MML::ExtRef.new(href: 'ext:/summary/discharge')}
+  let(:discharge_findings) {MML::ValueWithLink.new(value: 'Symptoms free, no wound infection.', link: [discharge_ref])}
+
+  let(:medication_ref) {MML::ExtRef.new(href: 'patient1234/prescription003.HL7')}
+  let(:medication) {MML::ValueWithLink.new(value: 'Prescription on discharge', link: [medication_ref])}
+  let(:summary) {MML::Summary.new(registeredDiagnosis: registered_diagnosis, deathInfo: death_info, surgeryModule: [surgery], chiefComplaints: 'Severe chest pain', patientProfile: 'The patient is a 40-year-old married forester.', history: 'On a background of good health, (snip)', physicalExam: physicalExam, clinicalCourse: [clinical_record], dischargeFindings: discharge_findings, medication: medication)}
 
   it 'is an instance of MML::Summary' do
     expect(summary).to be_an_instance_of MML::Summary
@@ -85,11 +94,43 @@ describe MML::Summary do
     expect(summary.patientProfile).to eq 'The patient is a 40-year-old married forester.'
   end
 
+  it 'patientProfile is optional' do
+    expect {summary.patientProfile}.not_to raise_error
+  end
+
   it 'hitory should be assigned properly' do
     expect(summary.history).to eq 'On a background of good health, (snip)'
   end
 
+  it 'history is optional' do
+    expect {summary.history = nil}.not_to raise_error
+  end
+
   it 'physicalExam should be assigned properly' do
     expect(summary.physicalExam.value).to eq 'Heart sounds were clear'
+  end
+
+  it 'physicalExam is optional' do
+    expect {summary.physicalExam = nil}.not_to raise_error
+  end
+
+  it 'clinicalCourse should be assigned properly' do
+    expect(summary.clinicalCourse[0].date).to eq '2013-12-20'
+  end
+
+  it 'clinicalCourse is optional' do
+    expect {summary.clinicalCourse = nil}.not_to raise_error
+  end
+
+  it 'dischargeFindings should be assigned properly' do
+    expect(summary.dischargeFindings.value).to eq 'Symptoms free, no wound infection.'
+  end
+
+  it 'dischargeFindings is optional' do
+    expect{summary.dischargeFindings = nil}.not_to raise_error
+  end
+
+  it 'medication should be assigned properly' do
+    expect(summary.medication.value).to eq 'Prescription on discharge'
   end
 end

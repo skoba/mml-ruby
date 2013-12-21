@@ -30,4 +30,8 @@ describe MML::ClinicalRecord do
   it 'relatedDoc should be assigned properly' do
     expect(clinical_record.relatedDoc[0].relation).to eq 'detail'
   end
+
+  it 'relatedDoc is optional' do
+    expect {clinical_record.relatedDoc = nil}.not_to raise_error
+  end
 end
