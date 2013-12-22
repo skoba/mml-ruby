@@ -296,5 +296,9 @@ module MML
     mandatory_attribute :value
     optional_attribute :relation
   end
+
+  class TestResult < ValueWithLink
+    optional_attribute :date
+  end
 end
 
