@@ -1,8 +1,6 @@
 require 'builder'
 
 module MML
-  require_relative '../mml'
-
   class BaseName < Base
     mandatory_attribute :value, :repCode
     optional_attribute :tableId
@@ -62,4 +60,5 @@ module MML
   class CreatorInfo < Base
     mandatory_attribute :personalizedInfo, :creatorLicense
   end
+
 end

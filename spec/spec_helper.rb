@@ -1,7 +1,7 @@
 require "rubygems"
 require "bundler/setup"
 require 'rspec'
-Dir[File.join(File.dirname(__FILE__), "..", "lib", "**/*.rb")].each{|f| require f }
+require_relative File.join(File.dirname(__FILE__), "..", "lib/mml")
 
 RSpec.configure do
 

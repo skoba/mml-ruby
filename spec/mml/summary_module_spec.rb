@@ -58,14 +58,18 @@ describe MML::Summary do
 
   let(:plan_ref) {MML::ExtRef.new(href: 'patient1234/rehabilitationplan')}
   let(:plan) {MML::ValueWithLink.new(value: 'Rehabilitation program and wound care will continue in the chronic hospital.', link: [plan_ref])}
-  let(:summary) {MML::Summary.new(registeredDiagnosis: registered_diagnosis, deathInfo: death_info, surgeryModule: [surgery], chiefComplaints: 'Severe chest pain', patientProfile: 'The patient is a 40-year-old married forester.', history: 'On a background of good health, (snip)', physicalExam: physicalExam, clinicalCourse: [clinical_record], dischargeFindings: discharge_findings, medication: medication, testResult: test_result, plan: plan, remarks: 'Patient education: good. Appointment in outpatient department in 2 weeks.')}
+  let(:summary) {MML::Summary.new(serviceHistory: service_history, registeredDiagnosis: [registered_diagnosis], deathInfo: death_info, surgeryModule: [surgery], chiefComplaints: 'Severe chest pain', patientProfile: 'The patient is a 40-year-old married forester.', history: 'On a background of good health, (snip)', physicalExam: physicalExam, clinicalCourse: [clinical_record], dischargeFindings: discharge_findings, medication: medication, testResults: [test_result], plan: plan, remarks: 'Patient education: good. Appointment in outpatient department in 2 weeks.')}
 
   it 'is an instance of MML::Summary' do
     expect(summary).to be_an_instance_of MML::Summary
   end
 
+  it 'serviceHistory should be assigned properly' do
+    expect(summary.serviceHistory.start).to eq '2013-08-25'
+  end
+
   it 'registeredDiagnosis should be assigned properly' do
-    expect(summary.registeredDiagnosis.diagnosis).to eq 'right tibial fracture'
+    expect(summary.registeredDiagnosis[0].diagnosis).to eq 'right tibial fracture'
   end
 
   it 'registeredDiagnosis is optional' do
@@ -144,8 +148,8 @@ describe MML::Summary do
     expect {summary.medication = nil}.not_to raise_error
   end
 
-  it 'testResult should be assigned properly' do
-    expect(summary.testResult.value).to eq 'Labo findings on discharge'
+  it 'testResults should be assigned properly' do
+    expect(summary.testResults[0].value).to eq 'Labo findings on discharge'
   end
 
   it 'plan should be assigned properly' do
@@ -154,5 +158,82 @@ describe MML::Summary do
 
   it 'remarks should be assigned properly' do
     expect(summary.remarks).to eq 'Patient education: good. Appointment in outpatient department in 2 weeks.'
+  end
+
+  describe '#to_xml' do
+    subject {summary.to_xml}
+
+    it {should match '<mmlSm:SummaryModule>'}
+    it {should match '<mmlSm:serviceHistory'}
+    it {should match 'mmlSm:start="2013-08-25"'}
+    it {should match 'mmlSm:end="2013-08-31"'}
+    it {should match '<mmlSm:outPatient><mmlSm:outPatientItem>'}
+    it {should match '<mmlSm:date>2013-08-25</mmlSm:date>'}
+    it {should match '<mmlSm:outPatientCondition'}
+    it {should match 'mmlSm:first="true"'}
+    it {should match 'mmlSm:emergency="true"'}
+    it {should match '10A.M.the patient was put into the ambulance on a stretcher and driven to our hospital.</mmlSm:outPatientCondition>'}
+    it {should match '<mmlSm:staffs><mmlSm:staffInfo>'}
+    it {should match '<mmlPsi:PersonalizedInfo>'}
+    it {should match '<mmlNm:fullname>Hiroyuki Yoshihara</mmlNm:fullname>'}
+    it {should match '</mmlPsi:PersonalizedInfo>'}
+    it {should match '<mmlCi:creatorLicense mmlCi:tableId="MML0026">doctor</mmlCi:creatorLicense></mmlSm:staffInfo></mmlSm:staffs>'}
+    it {should match '</mmlSm:outPatientItem></mmlSm:outPatient>'}
+    it {should match '<mmlSm:inPatient>'}
+    it {should match '<mmlSm:inPatientItem>'}
+    it {should match '<mmlSm:admission>'}
+    it {should match '<mmlSm:date>2013-12-08</mmlSm:date>'}
+    it {should match '<mmlSm:admissionCondition mmlSm:emergency="true">Emergency admission by ambulance</mmlSm:admissionCondition>'}
+    it {should match '<mmlSm:referFrom><mmlPsi:PersonalizedInfo'}
+    it {should match '<mmlNm:given>Yoko</mmlNm:given>'}
+    it {should match '</mmlPsi:PersonalizedInfo></mmlSm:referFrom>'}
+    it {should match '</mmlSm:admission><mmlSm:discharge><mmlSm:date>2013-08-31</mmlSm:date>'}
+    it {should match '<mmlSm:dischargeCondition mmlSm:outcome="transferChronic">4 P.O.D, the patient was transferred to the chronic hospital.</mmlSm:dischargeCondition>'}
+    it {should match '<mmlSm:referTo><mmlPsi:PersonalizedInfo>'}
+    it {should match '<mmlNm:family>Tanaka</mmlNm:family>'}
+    it {should match '</mmlPsi:PersonalizedInfo></mmlSm:referTo></mmlSm:discharge>'}
+    it {should match '<mmlSm:staffs>'}
+    it {should match '<mmlSm:staffInfo><mmlPsi:PersonalizedInfo>'}
+    it {should match '<mmlNm:fullname>Kenji Araki</mmlNm:fullname>'}
+    it {should match '</mmlCi:creatorLicense></mmlSm:staffInfo></mmlSm:staffs></mmlSm:inPatientItem>'}
+    it {should match '</mmlSm:inPatient>'}
+    it {should match '</mmlSm:serviceHistory>'}
+    it {should match '<mmlRd:RegisteredDiagnosisModule>'}
+    it {should match '<mmlRd:diagnosis>right tibial fracture</mmlRd:diagnosis>'}
+    it {should match '</mmlRd:RegisteredDiagnosisModule>'}
+    it {should match '<mmlSm:deathInfo'}
+    it {should match 'mmlSm:date="2013-08-31"'}
+    it {should match 'mmlSm:autopsy="true"'}
+    it {should match '>The patient died of gastric cancer.</mmlSm:deathInfo>'}
+    it {should match '<mmlSg:SurgeryModule>'}
+    it {should match '<mmlSg:surgeryItem>'}
+    it {should match '<mmlSg:operation>right lobectomy</mmlSg:operation>'}
+    it {should match '</mmlSg:surgeryItem>'}
+    it {should match '</mmlSg:SurgeryModule>'}
+    it {should match '<mmlSm:chiefComplaints>Severe chest pain</mmlSm:chiefComplaints>'}
+    it {should match '<mmlSm:patientProfile>The patient is a 40-year-old married forester.</mmlSm:patientProfile>'}
+    it {should match '<mmlSm:history>On a background of good health, \(snip\)</mmlSm:history>'}
+    it {should match '<mmlSm:physicalExam>Heart sounds were clear'}
+    it {should match '<mmlCm:extRef mmlCm:href="http://chest/auscultation"/>'}
+    it {should match '</mmlSm:physicalExam>'}
+    it {should match '<mmlSm:clinicalCourse>'}
+    it {should match '<mmlSm:clinicalRecord mmlSm:date="2013-12-20">Emergency coronary angiography was carried out.'}
+    it {should match '<mmlCm:extRef mmlCm:href="img://file/angio/"/>'}
+    it {should match '</mmlSm:clinicalRecord>'}
+    it {should match '</mmlSm:clinicalCourse>'}
+    it {should match '<mmlSm:dischargeFindings>Symptoms free, no wound infection.'}
+    it {should match '<mmlCm:extRef mmlCm:href="ext:/summary/discharge"/>'}
+    it {should match '</mmlSm:dischargeFindings>'}
+    it {should match '<mmlSm:medication>Prescription on discharge'}
+    it {should match '<mmlCm:extRef mmlCm:href="patient1234/prescription003.HL7"/>'}
+    it {should match '</mmlSm:medication>'}
+    it {should match '<mmlSm:testResults>'}
+    it {should match '<mmlSm:testResult mmlSm:date="2013-12-22">Labo findings on discharge'}
+    it {should match '<mmlCm:extRef mmlCm:href="patient1234/prescription004.HL7"/>'}
+    it {should match '</mmlSm:testResult></mmlSm:testResults>'}
+    it {should match '<mmlSm:plan>Rehabilitation program and wound care will continue in the chronic hospital.'}
+    it {should match '<mmlCm:extRef mmlCm:href="patient1234/rehabilitationplan"/></mmlSm:plan>'}
+    it {should match '<mmlSm:remarks>Patient education: good. Appointment in outpatient department in 2 weeks.</mmlSm:remarks>'}
+    it {should match '</mmlSm:SummaryModule>'}
   end
 end

@@ -1,5 +1,6 @@
 require 'builder'
 
+
 module MML
   MML_NAMESPACE = 'xmlns:mml="http://www.medxml.net/MML"'
 
@@ -54,8 +55,8 @@ module MML
     end
   end
 
-  require_relative 'mml/common'
   require_relative 'mml/version'
+  require_relative 'mml/common'
 
   class PatientInfo < Base
     mandatory_attribute :masterId, :personName, :birthday, :sex
@@ -251,7 +252,7 @@ module MML
   end
 
   class Summary < Base
-    optional_attribute :registeredDiagnosis, :deathInfo, :surgeryModule, :chiefComplaints, :patientProfile, :history, :physicalExam, :clinicalCourse, :dischargeFindings, :medication, :testResult, :plan, :remarks
+    optional_attribute :serviceHistory, :registeredDiagnosis, :deathInfo, :surgeryModule, :chiefComplaints, :patientProfile, :history, :physicalExam, :clinicalCourse, :dischargeFindings, :medication, :testResults, :plan, :remarks
   end
 
   class ServiceHistory < Base
@@ -273,8 +274,8 @@ module MML
     optional_attribute :admissionCondition, :emergency, :referFrom
   end
 
-  class StaffInfo < Base
-    mandatory_attribute :personalizedInfo, :creatorLicense
+  class StaffInfo < CreatorInfo
+
   end
 
   class Discharge < Base

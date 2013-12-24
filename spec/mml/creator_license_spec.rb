@@ -13,4 +13,11 @@ describe MML::CreatorLicense do
   it 'value should be doctor' do
     expect(creator_license.value).to eq 'doctor'
   end
+
+  describe "#to_xml" do
+    subject {creator_license.to_xml}
+
+    it {should match '<mmlCi:creatorLicense mmlCi:tableId="MML0026">'}
+    it {should match '>doctor</mmlCi:creatorLicense>'}
+  end
 end

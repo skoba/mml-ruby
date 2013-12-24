@@ -24,4 +24,8 @@ describe MML::StaffInfo do
   it 'creatorLicense is mandatory' do
     expect {staff_info.creatorLicense = nil}.to raise_error ArgumentError
   end
+
+  describe "to_xml" do
+    
+  end
 end
