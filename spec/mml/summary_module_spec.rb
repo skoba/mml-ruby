@@ -43,16 +43,22 @@ describe MML::Summary do
   let(:physicalExamRef) {MML::ExtRef.new(href: 'http://chest/auscultation')}
   let(:physicalExam) {MML::ValueWithLink.new(value: 'Heart sounds were clear', link: [physicalExamRef])}
 
-  let(:ext_ref) {MML::ExtRef.new(href: 'img://file/angio/')}
+  let(:doc_ref) {MML::ExtRef.new(href: 'img://file/angio/')}
   let(:related_doc) {MML::RelatedDoc.new(value: '11D1AC5400A0C94A814796045F768ED5', relation: 'detail')}
-  let(:clinical_record) {MML::ClinicalRecord.new(value: 'Emergency coronary angiography was carried out.', date: '2013-12-20', extRef: [ext_ref], relatedDoc: [related_doc])}
+  let(:clinical_record) {MML::ClinicalRecord.new(value: 'Emergency coronary angiography was carried out.', date: '2013-12-20', extRef: [doc_ref], relatedDoc: [related_doc])}
 
   let(:discharge_ref) {MML::ExtRef.new(href: 'ext:/summary/discharge')}
   let(:discharge_findings) {MML::ValueWithLink.new(value: 'Symptoms free, no wound infection.', link: [discharge_ref])}
 
   let(:medication_ref) {MML::ExtRef.new(href: 'patient1234/prescription003.HL7')}
   let(:medication) {MML::ValueWithLink.new(value: 'Prescription on discharge', link: [medication_ref])}
-  let(:summary) {MML::Summary.new(registeredDiagnosis: registered_diagnosis, deathInfo: death_info, surgeryModule: [surgery], chiefComplaints: 'Severe chest pain', patientProfile: 'The patient is a 40-year-old married forester.', history: 'On a background of good health, (snip)', physicalExam: physicalExam, clinicalCourse: [clinical_record], dischargeFindings: discharge_findings, medication: medication)}
+
+  let(:test_ref) {MML::ExtRef.new(href: 'patient1234/prescription004.HL7')}
+  let(:test_result) {MML::TestResult.new(date: '2013-12-22', value: 'Labo findings on discharge', link: [test_ref])}
+
+  let(:plan_ref) {MML::ExtRef.new(href: 'patient1234/rehabilitationplan')}
+  let(:plan) {MML::ValueWithLink.new(value: 'Rehabilitation program and wound care will continue in the chronic hospital.', link: [plan_ref])}
+  let(:summary) {MML::Summary.new(registeredDiagnosis: registered_diagnosis, deathInfo: death_info, surgeryModule: [surgery], chiefComplaints: 'Severe chest pain', patientProfile: 'The patient is a 40-year-old married forester.', history: 'On a background of good health, (snip)', physicalExam: physicalExam, clinicalCourse: [clinical_record], dischargeFindings: discharge_findings, medication: medication, testResult: test_result, plan: plan, remarks: 'Patient education: good. Appointment in outpatient department in 2 weeks.')}
 
   it 'is an instance of MML::Summary' do
     expect(summary).to be_an_instance_of MML::Summary
@@ -136,5 +142,17 @@ describe MML::Summary do
 
   it 'medication is optional' do
     expect {summary.medication = nil}.not_to raise_error
+  end
+
+  it 'testResult should be assigned properly' do
+    expect(summary.testResult.value).to eq 'Labo findings on discharge'
+  end
+
+  it 'plan should be assigned properly' do
+    expect(summary.plan.value).to eq 'Rehabilitation program and wound care will continue in the chronic hospital.'
+  end
+
+  it 'remarks should be assigned properly' do
+    expect(summary.remarks).to eq 'Patient education: good. Appointment in outpatient department in 2 weeks.'
   end
 end
