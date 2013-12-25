@@ -1,6 +1,5 @@
 require 'builder'
 
-
 module MML
   MML_NAMESPACE = 'xmlns:mml="http://www.medxml.net/MML"'
 
@@ -55,8 +54,8 @@ module MML
     end
   end
 
-  require_relative 'mml/version'
-  require_relative 'mml/common'
+  require_relative 'version'
+  require_relative 'common'
 
   class PatientInfo < Base
     mandatory_attribute :masterId, :personName, :birthday, :sex
@@ -301,5 +300,7 @@ module MML
   class TestResult < ValueWithLink
     optional_attribute :date
   end
+
+  require_relative 'parser/xml_parser'
 end
 

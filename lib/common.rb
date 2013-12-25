@@ -1,5 +1,3 @@
-require 'builder'
-
 module MML
   class BaseName < Base
     mandatory_attribute :value, :repCode
@@ -60,5 +58,4 @@ module MML
   class CreatorInfo < Base
     mandatory_attribute :personalizedInfo, :creatorLicense
   end
-
 end
