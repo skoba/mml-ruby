@@ -1,1 +1,12 @@
-<mmlAd:Address mmlAd:repCode="A" mmlAd:addressClass="business" mmlAd:tableId="MML0025"><mmlAd:homeNumber>506, Dept. 9, Kyoto Research Park (KRP)</mmlAd:homeNumber><mmlAd:town>Awata-cho 91, Chudoji, Shimogyo-ku</mmlAd:town><mmlAd:city>Kyoto-city</mmlAd:city><mmlAd:prefecture>Kyoto-fu</mmlAd:prefecture><mmlAd:full>506, Dept. 9, Kyoto Research Park (KRP), Awata-cho 91, Chudoji, Shimogyo-ku, Kyoto-city</mmlAd:full><mmlAd:zip>600-8815</mmlAd:zip><mmlAd:countryCode>JPN</mmlAd:countryCode></mmlAd:Address>
+<?xml version="1.0" ?>
+<mml xmlns:mmlAd="http://www.medxml.net/MML/SharedComponent/Address/1.0">
+  <mmlAd:Address mmlAd:repCode="A" mmlAd:addressClass="business" mmlAd:tableId="MML0025">
+    <mmlAd:homeNumber>506, Dept. 9, Kyoto Research Park (KRP)</mmlAd:homeNumber>
+    <mmlAd:town>Awata-cho 91, Chudoji, Shimogyo-ku</mmlAd:town>
+    <mmlAd:city>Kyoto-city</mmlAd:city>
+    <mmlAd:prefecture>Kyoto-fu</mmlAd:prefecture>
+    <mmlAd:full>506, Dept. 9, Kyoto Research Park (KRP), Awata-cho 91, Chudoji, Shimogyo-ku, Kyoto-city</mmlAd:full>
+    <mmlAd:zip>600-8815</mmlAd:zip>
+    <mmlAd:countryCode>JPN</mmlAd:countryCode>
+  </mmlAd:Address>
+</mml>
