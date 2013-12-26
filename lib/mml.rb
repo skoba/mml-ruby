@@ -301,6 +301,11 @@ module MML
     optional_attribute :date
   end
 
+  class LabTest < Base
+    mandatory_attribute :registId, :registTime, :reportTime
+    optional_attribute :sampleTime
+  end
+
   require_relative 'parser/xml_parser'
 end
 
