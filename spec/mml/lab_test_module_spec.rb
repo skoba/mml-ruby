@@ -1,5 +1,5 @@
 describe MML::LabTest do
-  let(:labo_test) {MML::LabTest.new(registId: '012345', sampleTime: '2013-12-26T11:45:39', registTime: '2013-12-26T11:49:50', reportTime: '2013-12-26T12:08:00')}
+  let(:labo_test) {MML::LabTest.new(registId: '012345', sampleTime: '2013-12-26T11:45:39', registTime: '2013-12-26T11:49:50', reportTime: '2013-12-26T12:08:00', reportStatus: 'Final version', statusCode: 'final', statusCodeId: 'mmlLb0001', set: 'anemia', setCode: '0012', setCodeId: 'facility_labo')}
 
   it 'is an instance of MML::LabTest' do
     expect(labo_test).to be_an_instance_of MML::LabTest
@@ -35,5 +35,49 @@ describe MML::LabTest do
 
   it 'reportTime is mandatory' do
     expect {labo_test.reportTime = nil}.to raise_error ArgumentError
+  end
+
+  it 'reportStatus should be registered properly' do
+    expect(labo_test.reportStatus).to eq 'Final version'
+  end
+
+  it 'reportStatus is mandatory' do
+    expect {labo_test.reportStatus = nil}.to raise_error ArgumentError
+  end
+
+  it 'statusCode should be assigned properly' do
+    expect(labo_test.statusCode).to eq 'final'
+  end
+
+  it 'statusCode is mandatory' do
+    expect {labo_test.statusCode = nil}.to raise_error ArgumentError
+  end
+
+  it 'statusCodeId should be assigned properly' do
+    expect(labo_test.statusCodeId).to eq 'mmlLb0001'
+  end
+  
+  it 'set should be assigned properly' do
+    expect(labo_test.set).to eq 'anemia'
+  end
+
+  it 'set is optional' do
+    expect {labo_test.set}.not_to raise_error
+  end
+
+  it 'setCode should be assigned properly' do
+    expect(labo_test.setCode).to eq '0012'
+  end
+
+  it 'setCode is optional' do
+    expect {labo_test.setCode = nil}.not_to raise_error
+  end
+
+  it 'setCodeId should be assigned properly' do
+    expect(labo_test.setCodeId).to eq 'facility_labo'
+  end
+
+  it 'setCodeId is optional' do
+    expect {labo_test.setCodeId = nil}.not_to raise_error
   end
 end
