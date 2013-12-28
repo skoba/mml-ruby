@@ -1,5 +1,5 @@
 describe MML::LabTest do
-  let(:labo_test) {MML::LabTest.new(registId: '012345', sampleTime: '2013-12-26T11:45:39', registTime: '2013-12-26T11:49:50', reportTime: '2013-12-26T12:08:00', reportStatus: 'Final version', statusCode: 'final', statusCodeId: 'mmlLb0001', set: 'anemia', setCode: '0012', setCodeId: 'facility_labo', facility: 'Kyoto University hospital', facilityCode: 'insurance', facilityCodeId: 'MML0027', department: 'EHR laboratory')}
+  let(:labo_test) {MML::LabTest.new(registId: '012345', sampleTime: '2013-12-26T11:45:39', registTime: '2013-12-26T11:49:50', reportTime: '2013-12-26T12:08:00', reportStatus: 'Final version', statusCode: 'final', statusCodeId: 'mmlLb0001', set: 'anemia', setCode: '0012', setCodeId: 'facility_labo', facility: 'Kyoto University hospital', facilityCode: 'insurance', facilityCodeId: 'MML0027', department: 'internal medicine', depCode: '01', depCodeId: 'MML0028', ward: '1-7F', wardCode: '017', wardCodeId: 'LOCAL001', client: 'Shinji KOBAYASHI', clientCode: '005884', clientCodeId: 'LOCAL002')}
 
   it 'is an instance of MML::LabTest' do
     expect(labo_test).to be_an_instance_of MML::LabTest
@@ -106,6 +106,58 @@ describe MML::LabTest do
   end
 
   it 'department should be assigned properly' do
-    expect(labo_test.department).to eq 'EHR laboratory'
+    expect(labo_test.department).to eq 'internal medicine'
+  end
+
+  it 'department is optional' do
+    expect {labo_test.department = nil}.not_to raise_error
+  end
+
+  it 'depCode should be assigned properly' do
+    expect(labo_test.depCode).to eq '01'
+  end
+
+  it 'depCode is optional' do
+    expect {labo_test.depCode = nil}.not_to raise_error
+  end
+
+  it 'depCodeId should be assigned properly' do
+    expect(labo_test.depCodeId).to eq 'MML0028'
+  end
+
+  it 'depCodeId is optional' do
+    expect {labo_test.depCodeId = nil}.not_to raise_error
+  end
+
+  it 'ward should be assigned properly' do
+    expect(labo_test.ward).to eq '1-7F'
+  end
+
+  it 'ward is optional' do
+    expect {labo_test.ward = nil}.not_to raise_error
+  end
+
+  it 'wardCode should be assigned properly' do
+    expect(labo_test.wardCode).to eq '017'
+  end
+
+  it 'wardCodeId should be assigned properly' do
+    expect(labo_test.wardCodeId).to eq 'LOCAL001'
+  end
+
+  it 'client should be assigned properly' do
+    expect(labo_test.client).to eq 'Shinji KOBAYASHI'
+  end
+
+  it 'client is optional' do
+    expect {labo_test.client = nil}.not_to raise_error
+  end
+
+  it 'clientCode should be assigned properly' do
+    expect(labo_test.clientCode).to eq '005884'
+  end
+
+  it 'clientCodeId should be assigned properly' do
+    expect(labo_test.clientCodeId).to eq 'LOCAL002'
   end
 end
