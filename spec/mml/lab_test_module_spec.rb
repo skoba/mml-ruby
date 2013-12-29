@@ -1,5 +1,5 @@
 describe MML::LabTest do
-  let(:labo_test) {MML::LabTest.new(registId: '012345', sampleTime: '2013-12-26T11:45:39', registTime: '2013-12-26T11:49:50', reportTime: '2013-12-26T12:08:00', reportStatus: 'Final version', statusCode: 'final', statusCodeId: 'mmlLb0001', set: 'anemia', setCode: '0012', setCodeId: 'facility_labo', facility: 'Kyoto University hospital', facilityCode: 'insurance', facilityCodeId: 'MML0027', department: 'internal medicine', depCode: '01', depCodeId: 'MML0028', ward: '1-7F', wardCode: '017', wardCodeId: 'LOCAL001', client: 'Shinji KOBAYASHI', clientCode: '005884', clientCodeId: 'LOCAL002')}
+  let(:labo_test) {MML::LabTest.new(registId: '012345', sampleTime: '2013-12-26T11:45:39', registTime: '2013-12-26T11:49:50', reportTime: '2013-12-26T12:08:00', reportStatus: 'Final version', statusCode: 'final', statusCodeId: 'mmlLb0001', set: 'anemia', setCode: '0012', setCodeId: 'facility_labo', facility: 'Kyoto University hospital', facilityCode: 'insurance', facilityCodeId: 'MML0027', department: 'internal medicine', depCode: '01', depCodeId: 'MML0028', ward: '1-7F', wardCode: '017', wardCodeId: 'LOCAL001', client: 'Shinji KOBAYASHI', clientCode: '005884', clientCodeId: 'LOCAL002', laboratoryCenter: 'EHR test lab', centerCode: '0784', centerCodeId: 'LOCAL003', technician: 'Taro Kyodai', techCode: '8576', techCodeId: 'LOCAL004')}
 
   it 'is an instance of MML::LabTest' do
     expect(labo_test).to be_an_instance_of MML::LabTest
@@ -157,7 +157,63 @@ describe MML::LabTest do
     expect(labo_test.clientCode).to eq '005884'
   end
 
+  it 'clientCode is optional' do
+    expect {labo_test.clientCode = nil}.not_to raise_error
+  end
+
   it 'clientCodeId should be assigned properly' do
     expect(labo_test.clientCodeId).to eq 'LOCAL002'
+  end
+
+  it 'clientCodeId is optional' do
+    expect {labo_test.clientCodeId = nil}.not_to raise_error
+  end
+
+  it 'laboratoryCenter should be assgined properly' do
+    expect(labo_test.laboratoryCenter).to eq 'EHR test lab'
+  end
+
+  it 'laboratoryCenter is mandatory' do
+    expect {labo_test.laboratoryCenter = nil}.to raise_error ArgumentError
+  end
+
+  it 'centerCode should be assigned properly' do
+    expect(labo_test.centerCode).to eq '0784'
+  end
+
+  it 'centerCode is mandatory' do
+    expect {labo_test.centerCode = nil}.to raise_error ArgumentError
+  end
+
+  it 'centerCodeId should be assgined properly' do
+    expect(labo_test.centerCodeId).to eq 'LOCAL003'
+  end
+
+  it 'centerCodeId is mandatory' do
+    expect {labo_test.centerCodeId = nil}.to raise_error ArgumentError
+  end
+  
+  it 'technician should be assigned properly' do
+    expect(labo_test.technician).to eq 'Taro Kyodai'
+  end
+
+  it 'technician is optional' do
+    expect {labo_test.technician = nil}.not_to raise_error
+  end
+
+  it 'techCode should be assigned properly' do
+    expect(labo_test.techCode).to eq '8576'
+  end
+
+  it 'techCode is optional' do
+    expect {labo_test.techCode = nil}.not_to raise_error
+  end
+
+  it 'techCodeId should be assigned properly' do
+    expect(labo_test.techCodeId).to eq 'LOCAL004'
+  end
+
+  it 'techCodeId is optional' do
+    expect {labo_test.techCodeId = nil}.not_to raise_error
   end
 end

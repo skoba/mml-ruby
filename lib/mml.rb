@@ -302,8 +302,8 @@ module MML
   end
 
   class LabTest < Base
-    mandatory_attribute :registId, :registTime, :reportTime, :reportStatus, :statusCode, :statusCodeId, :facility, :facilityCode, :facilityCodeId
-    optional_attribute :sampleTime, :set, :setCode, :setCodeId, :department, :depCode, :depCodeId, :ward, :wardCode, :wardCodeId, :client, :clientCode, :clientCodeId
+    mandatory_attribute :registId, :registTime, :reportTime, :reportStatus, :statusCode, :statusCodeId, :facility, :facilityCode, :facilityCodeId, :laboratoryCenter, :centerCode, :centerCodeId
+    optional_attribute :sampleTime, :set, :setCode, :setCodeId, :department, :depCode, :depCodeId, :ward, :wardCode, :wardCodeId, :client, :clientCode, :clientCodeId, :technician, :techCode, :techCodeId
   end
 
   require_relative 'parser/xml_parser'
