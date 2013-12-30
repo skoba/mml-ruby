@@ -306,6 +306,11 @@ module MML
     optional_attribute :sampleTime, :set, :setCode, :setCodeId, :department, :depCode, :depCodeId, :ward, :wardCode, :wardCodeId, :client, :clientCode, :clientCodeId, :technician, :techCode, :techCodeId
   end
 
+  class RepMemo < Base
+    mandatory_attribute :value
+    optional_attribute :repCodeName, :repCode, :repCodeId
+  end
+
   require_relative 'parser/xml_parser'
 end
 

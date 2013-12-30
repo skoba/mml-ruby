@@ -216,4 +216,8 @@ describe MML::LabTest do
   it 'techCodeId is optional' do
     expect {labo_test.techCodeId = nil}.not_to raise_error
   end
+
+  it 'repMemo should be assigned properly' do
+    expect(labo_test.repMemo).to eq ''
+  end
 end
