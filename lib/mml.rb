@@ -301,9 +301,9 @@ module MML
     optional_attribute :date
   end
 
-  class LabTest < Base
+  class Test < Base
     mandatory_attribute :registId, :registTime, :reportTime, :reportStatus, :statusCode, :statusCodeId, :facility, :facilityCode, :facilityCodeId, :laboratoryCenter, :centerCode, :centerCodeId
-    optional_attribute :sampleTime, :set, :setCode, :setCodeId, :department, :depCode, :depCodeId, :ward, :wardCode, :wardCodeId, :client, :clientCode, :clientCodeId, :technician, :techCode, :techCodeId
+    optional_attribute :sampleTime, :set, :setCode, :setCodeId, :department, :depCode, :depCodeId, :ward, :wardCode, :wardCodeId, :client, :clientCode, :clientCodeId, :technician, :techCode, :techCodeId, :repMemo, :repMemoF
   end
 
   class RepMemo < Base
@@ -311,6 +311,8 @@ module MML
     optional_attribute :repCodeName, :repCode, :repCodeId
   end
 
+  class LaboTest
+  end
   require_relative 'parser/xml_parser'
 end
 
