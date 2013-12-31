@@ -313,6 +313,10 @@ module MML
 
   class LaboTest
   end
+
+  class Specimen
+  end
+
   require_relative 'parser/xml_parser'
 end
 
