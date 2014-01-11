@@ -314,7 +314,8 @@ module MML
   class LaboTest
   end
 
-  class Specimen
+  class Specimen < Base
+    mandatory_attribute :specimenName, :spCode, :spCodeId
   end
 
   require_relative 'parser/xml_parser'
