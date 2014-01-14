@@ -316,6 +316,12 @@ module MML
 
   class Specimen < Base
     mandatory_attribute :specimenName, :spCode, :spCodeId
+    optional_attribute :spcMemo, :spcMemoF
+  end
+
+  class SpcMemo < Base
+    mandatory_attribute :value
+    optional_attribute :smCodeName, :smCode, :smCodeId
   end
 
   require_relative 'parser/xml_parser'
