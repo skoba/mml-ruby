@@ -329,6 +329,11 @@ module MML
     optional_attribute :acode, :icode, :scode, :mcode, :rcode
   end
 
+  class NumValue < Base
+    mandatory_attribute :value
+    optional_attribute :up, :low, :normal, :out
+  end
+
   require_relative 'parser/xml_parser'
 end
 
