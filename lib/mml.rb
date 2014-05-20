@@ -324,6 +324,11 @@ module MML
     optional_attribute :smCodeName, :smCode, :smCodeId
   end
 
+  class ItemName < Base
+    mandatory_attribute :value, :itCode, :itCodeId
+    optional_attribute :acode, :icode, :scode, :mcode, :rcode
+  end
+
   require_relative 'parser/xml_parser'
 end
 
