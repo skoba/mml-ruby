@@ -339,6 +339,11 @@ module MML
     optional_attribute :uCode, :uCodeId
   end
 
+  class ItemMemo < Base
+    mandatory_attribute :value
+    optional_attribute :imCodeName, :imCode, :imCodeId
+  end
+
   require_relative 'parser/xml_parser'
 end
 
