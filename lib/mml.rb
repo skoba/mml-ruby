@@ -334,6 +334,11 @@ module MML
     optional_attribute :up, :low, :normal, :out
   end
 
+  class Unit < Base
+    mandatory_attribute :value
+    optional_attribute :uCode, :uCodeId
+  end
+
   require_relative 'parser/xml_parser'
 end
 
