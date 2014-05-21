@@ -311,7 +311,9 @@ module MML
     optional_attribute :repCodeName, :repCode, :repCodeId
   end
 
-  class LaboTest
+  class LaboTest < Base
+    mandatory_attribute :registId, :registTime, :reportTime
+    optional_attribute :sampleTime
   end
 
   class Specimen < Base
