@@ -1,5 +1,6 @@
+# -*- coding: utf-8 -*-
 describe MML::LaboTest do
-  let(:labo_test) {MML::LaboTest.new(registId: '0002228', sampleTime: '2002-07-25T06:00:00', registTime: '2002-07-25T00:00:00', reportTime: '2002-07-25T11:15:00')}
+  let(:labo_test) {MML::LaboTest.new(registId: '0002228', sampleTime: '2002-07-25T06:00:00', registTime: '2002-07-25T00:00:00', reportTime: '2002-07-25T11:15:00', reportStatus: '最終報告', statusCode: 'final')}
 
   it 'is an instance of MML::LaboTest' do
     expect(labo_test).to be_an_instance_of MML::LaboTest
@@ -35,5 +36,17 @@ describe MML::LaboTest do
 
   it 'reportTime is mandatory' do
     expect {labo_test.reportTime = nil}.to raise_error ArgumentError
+  end
+
+  it 'reportStatus is final' do
+    expect(labo_test.reportStatus).to eq '最終報告'
+  end
+
+  it 'reportStatus is mandatory' do
+    expect {labo_test.reportStatus = nil}.to raise_error ArgumentError
+  end
+
+  it 'statusCode is final' do
+    expect(labo_test.statusCode).to eq 'final'
   end
 end

@@ -312,39 +312,39 @@ module MML
   end
 
   class LaboTest < Base
-    mandatory_attribute :registId, :registTime, :reportTime
+    mandatory_attribute :registId, :registTime, :reportTime, :reportStatus, :statusCode
     optional_attribute :sampleTime
   end
 
-  class Specimen < Base
-    mandatory_attribute :specimenName, :spCode, :spCodeId
-    optional_attribute :spcMemo, :spcMemoF
-  end
-
-  class SpcMemo < Base
-    mandatory_attribute :value
-    optional_attribute :smCodeName, :smCode, :smCodeId
-  end
-
-  class ItemName < Base
-    mandatory_attribute :value, :itCode, :itCodeId
-    optional_attribute :acode, :icode, :scode, :mcode, :rcode
-  end
-
-  class NumValue < Base
-    mandatory_attribute :value
-    optional_attribute :up, :low, :normal, :out
-  end
-
-  class Unit < Base
-    mandatory_attribute :value
-    optional_attribute :uCode, :uCodeId
-  end
-
-  class ItemMemo < Base
-    mandatory_attribute :value
-    optional_attribute :imCodeName, :imCode, :imCodeId
-  end
+    class Specimen < Base
+      mandatory_attribute :specimenName, :spCode, :spCodeId
+      optional_attribute :spcMemo, :spcMemoF
+    end
+    
+    class SpcMemo < Base
+      mandatory_attribute :value
+      optional_attribute :smCodeName, :smCode, :smCodeId
+    end
+    
+    class ItemName < Base
+      mandatory_attribute :value, :itCode, :itCodeId
+      optional_attribute :acode, :icode, :scode, :mcode, :rcode
+    end
+    
+    class NumValue < Base
+      mandatory_attribute :value
+      optional_attribute :up, :low, :normal, :out
+    end
+    
+    class Unit < Base
+      mandatory_attribute :value
+      optional_attribute :uCode, :uCodeId
+    end
+    
+    class ItemMemo < Base
+      mandatory_attribute :value
+      optional_attribute :imCodeName, :imCode, :imCodeId
+    end
 
   require_relative 'parser/xml_parser'
 end
