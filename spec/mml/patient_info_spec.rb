@@ -77,7 +77,7 @@ describe MML::PatientInfo do
   end
 
   it 'death flag should be assigned porperly' do
-    expect(patient_info.death.flag).to be_false
+    expect(patient_info.death.flag).to be false
   end
 
   context '#to_xml' do

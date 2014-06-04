@@ -10,7 +10,7 @@ describe MML::DeathInfo do
   end
 
   it 'autopsy should be assgined properly' do
-    expect(death_info.autopsy).to be_true
+    expect(death_info.autopsy).to be true
   end
 
   it 'value should be assigned properly' do

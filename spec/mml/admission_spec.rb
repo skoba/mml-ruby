@@ -28,7 +28,7 @@ describe MML::Admission do
   end
   
   it 'emergency should be assigned properly' do
-    expect(admission.emergency).to be_true
+    expect(admission.emergency).to be true
   end
 
   it 'emergency is optional' do

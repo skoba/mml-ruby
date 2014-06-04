@@ -50,7 +50,7 @@ describe MML::Insurance do
   end
 
   it 'family class should be assigned properly' do
-    expect(insurance.familyClass).to be_false
+    expect(insurance.familyClass).to be false
   end
 
   it 'family class is mandatory' do

@@ -49,4 +49,8 @@ describe MML::LaboTest do
   it 'statusCode is final' do
     expect(labo_test.statusCode).to eq 'final'
   end
+
+  it 'statusCode is mandatory' do
+    expect {labo_test.statusCode = nil}.to raise_error ArgumentError
+  end
 end

@@ -13,7 +13,7 @@ describe MML::VaccinationItem do
     expect {vaccination_item.vaccine = nil}.to raise_error ArgumentError
   end
   it 'injected should be assigned properly' do
-    expect(vaccination_item.injected).to be_true
+    expect(vaccination_item.injected).to be true
   end
 
   it 'injected is mandatory' do

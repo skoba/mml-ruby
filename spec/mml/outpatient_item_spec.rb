@@ -19,7 +19,7 @@ describe MML::OutpatientItem do
   end
 
   it 'first should be assigned properly' do
-    expect(outpatient_item.first).to be_true
+    expect(outpatient_item.first).to be true
   end
 
   it 'first is optional' do
@@ -27,7 +27,7 @@ describe MML::OutpatientItem do
   end
 
   it 'emergency should be assigned properly' do
-    expect(outpatient_item.emergency).to be_true
+    expect(outpatient_item.emergency).to be true
   end
 
   it 'emergency is optional' do
